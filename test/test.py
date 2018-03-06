@@ -1,63 +1,78 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import inspect
-import sys, json
+from flask_marshmallow import Marshmallow
+import sys
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test2.db'
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     warehouse_id = db.Column(db.Integer, db.ForeignKey('warehouse.id'), nullable=False)
-    classification_id = db.Column(db.Integer, db.ForeignKey('classification.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     timestamp = db.Column(db.Integer, nullable=False)
     image_path = db.Column(db.String(120), unique=True, nullable=False)
 
-    warehouse = db.relationship('Warehouse', backref=db.backref('item', lazy=True))
-    classification = db.relationship('Classification', backref=db.backref('item', lazy=True))
-
-    # @property
-    # def warehouse(self):
-    #     return self._warehouse.warehouse
-
-    # @property
-    # def classification(self):
-    #     return self._classification.classification
+    warehouse = db.relationship('Warehouse', backref='item')
+    category = db.relationship('Category', backref='item')
 
 class Warehouse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String(50), unique=True, nullable=False)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
-    #items = db.relationship('Item', backref='item', lazy=True)
+    
+    db.relationship('Item', backref='item', lazy=True)
 
-class Classification(db.Model):
+    def __repr__(self):
+        return '<Warehouse - Id: {0}, City: {1}, Coordinates: ({2}, {3})>' \
+            .format(self.id, self.city, self.latitude, self.longitude)
+
+class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    classification = db.Column(db.String(50), unique=True, nullable=False)
-    #items = db.relationship('Item', backref='item', lazy=True)
+    category = db.Column(db.String(50), unique=True, nullable=False)
+    
+    db.relationship('Item', backref='item', lazy=True)
 
-    # def __repr__(self):
-    #     return '<Classification %r>' % self.classification
+    def __repr__(self):
+        return '<Category - Id: {0}, Category: {1}>' \
+            .format(self.id, self.category)
 
-@app.route("/classifications")
-def classifications():
-    classes = [object_as_dict(x) for x in Classification.query.all()]
-    return json.dumps(classes, indent=4)
+class ItemSchema(ma.ModelSchema):
+    class Meta:
+        fields = ('id', 'warehouse_id', 'category_id', 'timestamp', 'image_path')
+        # model = Item
+
+class WarehouseSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'city', 'latitude', 'longitude')
+        # model = Warehouse
+
+class CategorySchema(ma.ModelSchema):
+    class Meta:
+        fields = ('id', 'category')
+        # model = Category
+
+@app.route("/categories")
+def categories():
+    return jsonify(CategorySchema(many = True).dump(Category.query.all()))
 
 @app.route("/warehouses")
 def warehouses():
-    classes = [object_as_dict(x) for x in Warehouse.query.all()]
-    return json.dumps(classes, indent=4)
+    return jsonify(WarehouseSchema(many = True).dump(Warehouse.query.all()))
 
 @app.route("/items")
 def items():
-    classes = [object_as_dict(x) for x in Item.query.all()]
-    return json.dumps(classes, indent=4)
+    return jsonify(ItemSchema(many = True).dump(Item.query.all()))
 
-def object_as_dict(obj):
-    return {c.key: getattr(obj, c.key)
-            for c in inspect(obj).mapper.column_attrs}
+@app.route("/items/<classtype>")
+def items_filtered(classtype):
+    return ""
+    # classes = [object_as_dict(x) for x in Item.query.filter_by(classification_id=classtype).all()]
+    # return json.dumps(classes, indent=4)
+
 
 if __name__ == "__main__":
     app.run()

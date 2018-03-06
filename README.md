@@ -3,5 +3,4 @@
 Instructions:
 1. Run `pip install -r req.txt`
 2. Run `python app.py`
-3. 
 

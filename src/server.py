@@ -1,28 +1,29 @@
-import os, sys
-#, config
-from flask_sqlalchemy import SQLAlchemy
+import os
+import sys
+
 from flask import Flask
 
-#from .controllers.data_controller import data
-#from .controllers.control_controller import control
+from config import Config, DevConfig
+from src.controllers.category_controller import categories
+from src.controllers.warehouse_controller import warehouses
+from src.controllers.item_controller import items
 
-app = Flask(__name__)
+from src.extensions import db, ma
 
-# db_path = os.path.dirname(sys.modules['__main__'].__file__) + config.db_path
-app.config['SQLALCHEMY_DATABASE_URI'] =  "..\\db\\test.db"
-db = SQLAlchemy(app)
 
-#app.register_blueprint(data)
-#app.register_blueprint(control)
+def create_app(config_object=DevConfig):
+    app = Flask(__name__)
+    app.config.from_object(config_object)
 
-class Item(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    warehouse_id = db.Column(db.Integer, db.ForeignKey('warehouse.id'), nullable=False)
-    classification_id = db.Column(db.Integer, db.ForeignKey('classification.id'), nullable=False)
-    timestamp = db.Column(db.Integer, nullable=False)
-    classification = db.Column(db.String(120), nullable=False)
-    image_path = db.Column(db.String(120), nullable=False)
+    db.init_app(app)
+    ma.init_app(app)
 
-@app.route("/")
-def test():
-    print(Item.query.all(), file=sys.stderr)
+    app.register_blueprint(warehouses)
+    app.register_blueprint(categories)
+    app.register_blueprint(items)
+
+    return app
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run()

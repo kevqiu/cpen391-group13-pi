@@ -1,3 +1,6 @@
 flask
 flask_sqlalchemy
-flask_marshmallow
+flask-marshmallow
+marshmallow-sqlalchemy
+sqlalchemy
+marshmallow

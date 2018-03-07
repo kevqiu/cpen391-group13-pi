@@ -1,7 +1,7 @@
 import sys
 from flask import Blueprint
 
-from src.models.item_model import ItemSchema, Item
+from server.models.item_model import ItemSchema, Item
 
 items = Blueprint('items', __name__)
 

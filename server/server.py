@@ -1,14 +1,10 @@
-import os
-import sys
-
 from flask import Flask
 
-from config import Config, DevConfig
-from src.controllers.category_controller import categories
-from src.controllers.warehouse_controller import warehouses
-from src.controllers.item_controller import items
-
-from src.extensions import db, ma
+from server.config import DevConfig
+from server.controllers.category_controller import categories
+from server.controllers.warehouse_controller import warehouses
+from server.controllers.item_controller import items
+from server.extensions import db, ma
 
 
 def create_app(config_object=DevConfig):

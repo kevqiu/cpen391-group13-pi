@@ -1,4 +1,4 @@
-from src.extensions import ma, db
+from server.extensions import ma, db
 
 
 class Item(db.Model):

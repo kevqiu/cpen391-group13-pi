@@ -1,7 +1,7 @@
 import sys
 from flask import Blueprint, jsonify
 
-from src.models.warehouse_model import WarehouseSchema, Warehouse
+from server.models.warehouse_model import WarehouseSchema, Warehouse
 
 warehouses = Blueprint('warehouses', __name__)
 

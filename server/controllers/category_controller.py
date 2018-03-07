@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-from src.models.category_model import CategorySchema, Category
+from server.models.category_model import CategorySchema, Category
 
 categories = Blueprint('categories', __name__)
 

@@ -1,6 +1,4 @@
-import os
-
-import sys
+import os, sys
 
 
 class Config(object):

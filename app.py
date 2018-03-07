@@ -7,4 +7,4 @@ if __name__ == '__main__':
         if sys.argv[1] == '-db':
             init_db()
     else:
-        server.create_app().run()
+        server.create_app().run(host='0.0.0.0')

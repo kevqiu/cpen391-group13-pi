@@ -1,7 +1,8 @@
 import sys
-from flask import Blueprint, request
+from flask import Blueprint, request, send_file, app
 
 from server.models.item_model import ItemSchema, Item
+from server.config import DevConfig
 
 items = Blueprint('items', __name__)
 
@@ -24,3 +25,8 @@ def get_all_items():
 @items.route('/items/<int:id>', methods=['GET'])
 def get_item(id):
     return ItemSchema().jsonify(Item.query.get(id))
+
+
+@items.route('/items/<int:id>/image', methods=['GET'])
+def get_item_image(id):
+    return send_file('{0}\{1}.jpeg'.format(DevConfig.IMG_PATH, id), mimetype='image/jpeg')

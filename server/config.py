@@ -8,6 +8,8 @@ class Config(object):
     DB_DIR = '\\db\\database.db'
     DB_PATH = os.path.abspath(os.path.dirname(sys.modules['__main__'].__file__) + DB_DIR)
 
+    IMG_PATH = os.path.abspath(os.path.dirname(sys.modules['__main__'].__file__) + '\\images')
+
     # extension configs
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

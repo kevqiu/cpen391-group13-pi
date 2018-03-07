@@ -39,5 +39,5 @@ data = [
     Category(category='green'),
     Category(category='blue'),
 
-    Item(warehouse_id=1, category_id=1, timestamp=0, image_path=r'\img\0.jpeg')
+    Item(warehouse_id=1, category_id=1, timestamp=0, image_path=r'\img\1.jpeg')
 ]

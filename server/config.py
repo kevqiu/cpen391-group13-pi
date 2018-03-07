@@ -5,7 +5,7 @@ class Config(object):
     """Base config."""
 
     # directory configs
-    DB_DIR = '\db\database.db'
+    DB_DIR = '\\db\\database.db'
     DB_PATH = os.path.abspath(os.path.dirname(sys.modules['__main__'].__file__) + DB_DIR)
 
     # extension configs

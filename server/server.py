@@ -7,9 +7,12 @@ from server.controllers.item_controller import items
 from server.extensions import db, ma
 
 
+""" Main app """
 def create_app(config_object=DevConfig):
     app = Flask(__name__)
     app.config.from_object(config_object)
+
+    print('Connecting to DB at {0}'.format(config_object.DB_PATH))
 
     db.init_app(app)
     ma.init_app(app)
@@ -19,6 +22,7 @@ def create_app(config_object=DevConfig):
     app.register_blueprint(items)
 
     return app
+
 
 if __name__ == '__main__':
     app = create_app()

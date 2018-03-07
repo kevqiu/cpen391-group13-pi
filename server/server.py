@@ -2,6 +2,7 @@ from flask import Flask
 
 from server.config import DevConfig
 from server.controllers.category_controller import categories
+from server.controllers.error_controller import error
 from server.controllers.warehouse_controller import warehouses
 from server.controllers.item_controller import items
 from server.extensions import db, ma
@@ -20,6 +21,7 @@ def create_app(config_object=DevConfig):
     app.register_blueprint(warehouses)
     app.register_blueprint(categories)
     app.register_blueprint(items)
+    app.register_blueprint(error)
 
     return app
 

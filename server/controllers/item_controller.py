@@ -1,5 +1,5 @@
-import sys
-from flask import Blueprint, request, send_file, app
+import os
+from flask import Blueprint, request, send_file, make_response, jsonify
 
 from server.models.item_model import ItemSchema, Item
 from server.config import DevConfig
@@ -29,4 +29,9 @@ def get_item(id):
 
 @items.route('/items/<int:id>/image', methods=['GET'])
 def get_item_image(id):
-    return send_file('{0}\{1}.jpeg'.format(DevConfig.IMG_PATH, id), mimetype='image/jpeg')
+    path = '{0}\{1}.jpeg'.format(DevConfig.IMG_PATH, id)
+    if os.path.isfile('{0}\{1}.jpeg'.format(DevConfig.IMG_PATH, id)):
+        return send_file(path, mimetype='image/jpeg')
+    else:
+        return make_response(jsonify({'error': 'Image not found on server'}), 404)
+

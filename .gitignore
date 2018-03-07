@@ -105,3 +105,4 @@ venv.bak/
 .mypy_cache/
 tempCodeRunnerFile.py
 /.idea/
+/db/database.db

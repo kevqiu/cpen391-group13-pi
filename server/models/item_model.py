@@ -8,6 +8,9 @@ class Item(db.Model):
     timestamp = db.Column(db.Integer, nullable=False)
     image_path = db.Column(db.String(120), unique=True, nullable=False)
 
+    def __repr__(self):
+        return '<Item - Id: {0}, WarehouseId: {1}, CategoryId: {2}>, Timestamp: {3}, ImagePath: {4}' \
+            .format(self.id, self.warehouse_id, self.category_id, self.timestamp, self.image_path)
 
 class ItemSchema(ma.ModelSchema):
     class Meta:

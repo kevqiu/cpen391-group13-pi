@@ -1,14 +1,14 @@
-import os, sys
+from os import path
 
 
 class Config(object):
     """Base config."""
 
     # directory configs
+    PROJECT_DIR = path.dirname(path.dirname(path.abspath(__file__)))
     DB_DIR = '\\db\\database.db'
-    DB_PATH = os.path.abspath(os.path.dirname(sys.modules['__main__'].__file__) + DB_DIR)
-
-    IMG_PATH = os.path.abspath(os.path.dirname(sys.modules['__main__'].__file__) + '\\images')
+    DB_PATH = path.abspath(PROJECT_DIR + DB_DIR)
+    IMG_PATH = path.abspath(PROJECT_DIR + '\\images')
 
     # extension configs
     SQLALCHEMY_TRACK_MODIFICATIONS = False

@@ -2,5 +2,3 @@ flask
 flask_sqlalchemy
 flask-marshmallow
 marshmallow-sqlalchemy
-sqlalchemy
-marshmallow

@@ -2,3 +2,6 @@ flask
 flask_sqlalchemy
 flask-marshmallow
 marshmallow-sqlalchemy
+tensorflow
+scikit-image
+imgaug

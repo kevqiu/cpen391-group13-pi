@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Flask
 
 from server.config import DevConfig
@@ -39,5 +41,5 @@ data = [
     Category(category='green'),
     Category(category='blue'),
 
-    Item(warehouse_id=1, category_id=1, timestamp=0, image_path=r'\img\1.jpeg')
+    Item(warehouse_id=1, category_id=1, datetime=datetime.now(), image_path=r'\img\1.jpeg')
 ]

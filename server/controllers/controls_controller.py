@@ -22,6 +22,6 @@ def capture_image(data):
     return ''
 
 @controls.route('/controls/override/<string:control>', methods=['POST'])
-def capture_image(control):
+def override(control):
     ser.write('ctrl:' + control)
     return ''

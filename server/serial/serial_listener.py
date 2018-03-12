@@ -1,6 +1,6 @@
-from server.extensions import ser
+import re
 
-print("Serial connected!")
+from server.extensions import ser
 
 
 def serial_listener():
@@ -16,6 +16,7 @@ def serial_listener():
 
 
 def handle_message(msg):
-    if 'time-' in msg and 'gps-' in msg:
+    if 'time-' in msg:
         print('Message contains timestamp and gps data')
+        time = re.search('')
         # call endpoint or just put the sutff here?

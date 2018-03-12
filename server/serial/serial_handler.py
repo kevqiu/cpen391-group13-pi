@@ -1,3 +1,5 @@
+import requests
+
 from server.controllers.controls_controller import capture_image
 from server.extensions import ser
 from server.helpers.gps_helper import parse_gpgga_data
@@ -24,4 +26,10 @@ def handle_message(msg):
         gpgga_data = msg.split('gps=')[1]
         data = parse_gpgga_data(gpgga_data)
         # data = None
-        capture_image(data)
+        payload = {
+            'datetime' : data.datetime,
+            'latitude' : data.latitude,
+            'longitude': data.longitude
+        }
+        requests.post('http://localhost:5000/controls/capture', data=payload)
+        # capture_image(data)

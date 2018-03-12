@@ -16,4 +16,3 @@ try:
     print('Serial port opened succesfully!')
 except:
     print('\nSerial port failed to be opened!\n', file=sys.stderr)
-

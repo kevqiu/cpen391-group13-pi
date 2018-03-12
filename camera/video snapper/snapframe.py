@@ -1,5 +1,6 @@
 import cv2
 import argparse
+import os
 
 def save_video_frames(video_in, image_dir, frame_offset=1):
     """
@@ -22,7 +23,8 @@ def save_video_frames(video_in, image_dir, frame_offset=1):
         success,image = vidcap.read()
         frame_count += 1
         if (frame_count % frame_offset == 0):
-            cv2.imwrite(image_dir + 'frame%d.jpg' % filename_count, image)     # save frame as JPEG file
+            filename = os.path.join(image_dir, 'frame%d.jpg' % filename_count)
+            cv2.imwrite(filename, image)     # save frame as JPEG file
             filename_count += 1
     print(str(filename_count) + ' frames saved')
 

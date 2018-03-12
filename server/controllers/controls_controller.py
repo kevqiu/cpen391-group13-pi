@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, abort
 
 from server.extensions import ser
 from server.models.item_model import Item
@@ -23,15 +23,17 @@ def capture_image(data):
     return ''
 
 
-@controls.route('/controls/autosort', methods=['POST'])
-def autosort():
-    serial_write('ctrl:autosort')
-    return 'Autosort enabled'
+@controls.route('/controls/autosort/<int:status>', methods=['POST'])
+def autosort(status):
+    if status == 0 or status == 1:
+        serial_write('ctrl:as-{0}'.format(status))
+        return 'Autosort enabled'
+    else:
+        abort(400, {'message': 'Invalid autosort status: <{0}>. '
+                               'Valid inputs are 0, 1'.format(status)})
 
 
 @controls.route('/controls/position/<int:pos>', methods=['POST'])
 def override_position(pos):
-    serial_write('ctrl:' + pos)
+    serial_write('ctrl:{0}'.format(pos))
     return 'Set to position ' + pos
-
-

@@ -3,6 +3,11 @@ from flask import Blueprint, make_response, jsonify
 error = Blueprint('error', __name__)
 
 
+@error.app_errorhandler(400)
+def err_400(e):
+    return make_response(jsonify({'error': e.description['message']}), 400)
+
+
 @error.app_errorhandler(404)
 def err_404(e):
     return make_response(jsonify({'error': 'Route not found.'}), 404)

@@ -2,6 +2,7 @@ from flask import Blueprint
 
 from server.extensions import ser
 from server.models.item_model import Item
+from server.serial.serial_listener import serial_write
 
 controls = Blueprint('contorls', __name__)
 
@@ -24,11 +25,13 @@ def capture_image(data):
 
 @controls.route('/controls/autosort', methods=['POST'])
 def autosort():
-    ser.write('ctrl:autosort')
+    serial_write('ctrl:autosort')
     return 'Autosort enabled'
 
 
 @controls.route('/controls/position/<int:pos>', methods=['POST'])
 def override_position(pos):
-    ser.write('ctrl:' + pos)
+    serial_write('ctrl:' + pos)
     return 'Set to position ' + pos
+
+

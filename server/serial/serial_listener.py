@@ -20,3 +20,7 @@ def handle_message(msg):
         print('Message contains timestamp and gps data')
         print(msg)
         # call endpoint or just put the sutff here?
+
+
+def serial_write(msg):
+    ser.write(msg.encode('utf-8'))

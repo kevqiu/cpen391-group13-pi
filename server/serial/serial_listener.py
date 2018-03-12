@@ -18,5 +18,5 @@ def serial_listener():
 def handle_message(msg):
     if 'time-' in msg:
         print('Message contains timestamp and gps data')
-        time = re.search('')
+        print(msg)
         # call endpoint or just put the sutff here?

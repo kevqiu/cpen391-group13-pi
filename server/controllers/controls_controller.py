@@ -21,7 +21,14 @@ def capture_image(data):
     # db.session.commit()
     return ''
 
-@controls.route('/controls/override/<string:control>', methods=['POST'])
-def override(control):
-    ser.write('ctrl:' + control)
-    return ''
+
+@controls.route('/controls/autosort', methods=['POST'])
+def autosort():
+    ser.write('ctrl:autosort')
+    return 'Autosort enabled'
+
+
+@controls.route('/controls/position/<int:pos>', methods=['POST'])
+def override_position(pos):
+    ser.write('ctrl:' + pos)
+    return 'Set to position ' + pos

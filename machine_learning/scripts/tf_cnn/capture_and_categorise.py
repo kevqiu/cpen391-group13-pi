@@ -16,8 +16,6 @@ args = None
 # https://svds.com/tensorflow-image-recognition-raspberry-pi/
 def load_graph(model_file):
     with tf.Session() as persisted_sess:
-        stdscr.addstr('Model file: ')
-        stdscr.addstr(model_file + '\n')
         graph = tf.Graph()
         graph_def = tf.GraphDef()
         with tf.gfile.FastGFile(model_file, 'rb') as f:
@@ -64,16 +62,13 @@ def main(stdscr):
                 end=time.time()
                 results = np.squeeze(results)
                 top_k = results.argsort()[-5:][::-1]
-                print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
+                stdscr.addstr('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
                 for i in top_k:
-                    print(labels[i], results[i])
+                    stdscr.addstr(labels[i], results[i], '\n')
         except Exception as e: 
-            print('Exception occured')
-            print(e)
+            stdscr.addstr('Exception occured')
+            stdscr.addstr(str(e))
             pass
-
-
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -93,6 +88,7 @@ if __name__ == '__main__':
     if not args.model or not args.labels:
         print('Please specify model and labels')
         quit()
+
     # Set up the UI (curses)
     stdscr = curses.initscr()
     curses.noecho() # Don't echo back to screen

@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 from server.controllers.controls_controller import capture_image
@@ -31,5 +33,6 @@ def handle_message(msg):
             'latitude' : data.latitude,
             'longitude': data.longitude
         }
-        requests.post('http://localhost:5000/controls/capture', data=payload)
+        requests.post('http://localhost:5000/controls/capture',
+                      json=payload)
         # capture_image(data)

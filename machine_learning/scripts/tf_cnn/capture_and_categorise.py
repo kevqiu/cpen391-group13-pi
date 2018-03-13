@@ -42,6 +42,7 @@ def main(stdscr):
             if str(key) == 'q':
                 break
             if str(key) == 'c':
+                stdscr.clear()
                 camera.start_preview()
                 time.sleep(2)
                 camera.capture('test.jpg')
@@ -64,7 +65,7 @@ def main(stdscr):
                 top_k = results.argsort()[-5:][::-1]
                 stdscr.addstr('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
                 for i in top_k:
-                    stdscr.addstr(labels[i], results[i], '\n')
+                    stdscr.addstr(str(labels[i]) + ': ' + str(results[i]) + '\n')
         except Exception as e: 
             stdscr.addstr('Exception occured')
             stdscr.addstr(str(e))

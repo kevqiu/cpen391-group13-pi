@@ -29,7 +29,7 @@ def handle_message(msg):
         data = parse_gpgga_data(gpgga_data)
         # data = None
         payload = {
-            'datetime' : data.datetime,
+            'datetime' : data.datetime.strftime("%Y-%m-%d %H:%M:%S.%f"),
             'latitude' : data.latitude,
             'longitude': data.longitude
         }

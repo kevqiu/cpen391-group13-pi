@@ -12,8 +12,7 @@ controls = Blueprint('controls', __name__)
 
 @controls.route('/controls/capture', methods=['POST'])
 def capture_image():
-    dt = datetime.strptime(request.json.get('datetime').split('+')[0],
-                           "%Y-%M-%DT%H:%M:%S.%f")
+    dt = datetime.strptime(request.json.get('datetime'), "%Y-%m-%d %H:%M:%S.%f")
     lat = request.json.get('latitude')
     long = request.json.get('longitude')
 

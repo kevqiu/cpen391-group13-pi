@@ -26,13 +26,17 @@ capture: gps=$GPGGA<gpgga data>
 def handle_message(msg):
     if 'capture: gps=' in msg:
         gpgga_data = msg.split('gps=')[1]
-        data = parse_gpgga_data(gpgga_data)
+        try:
+            data = parse_gpgga_data(gpgga_data)
+            payload = {
+                'datetime': data.datetime.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                'latitude': data.latitude,
+                'longitude': data.longitude
+            }
+            requests.post('http://localhost:5000/controls/capture',
+                          json=payload)
+        except:
+            print('Error attempting to parse GPGGA string')
         # data = None
-        payload = {
-            'datetime' : data.datetime.strftime("%Y-%m-%d %H:%M:%S.%f"),
-            'latitude' : data.latitude,
-            'longitude': data.longitude
-        }
-        requests.post('http://localhost:5000/controls/capture',
-                      json=payload)
+
         # capture_image(data)

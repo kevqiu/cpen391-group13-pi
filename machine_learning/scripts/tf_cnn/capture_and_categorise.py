@@ -4,7 +4,8 @@ import numpy as np
 import argparse
 import os
 import time
-from label_image import read_tensor_from_image_file
+from label_image import read_tensor_from_image_file, load_label
+
 
 # Breaks windows compatibility :X
 import curses
@@ -31,7 +32,7 @@ def main(stdscr):
 
     # configure the graph
     graph, session = load_graph(args.model)
-    labels = load_labels(label_file)
+    labels = load_labels(args.labels)
     input_name = 'import/input'
     output_name = 'import/final_result'
     input_operation = graph.get_operation_by_name(input_name)
@@ -66,8 +67,8 @@ def main(stdscr):
                 print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
                 for i in top_k:
                     print(labels[i], results[i])
-            except Exception as e: 
-                pass
+        except Exception as e: 
+            pass
 
 
 

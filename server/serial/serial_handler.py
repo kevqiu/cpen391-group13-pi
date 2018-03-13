@@ -1,12 +1,13 @@
-import json
-
 import requests
 
-from server.controllers.controls_controller import capture_image
 from server.extensions import ser
 from server.helpers.gps_helper import parse_gpgga_data
 
-
+""" 
+Serial thread to be spun up on server init
+Contains a buffer that stores incoming serial data.
+Calls handle_message when a \r is received  
+"""
 def serial_listener():
     msg = ''
     while True:
@@ -19,12 +20,14 @@ def serial_listener():
                 msg = ''
 
 
-""" Handeles serial messages
-Message format:
-capture: gps=$GPGGA<gpgga data>
+""" 
+Handeles serial messages
+Message types:
+- capture: gps=$GPGGA<gpgga data>
+    - calls server to take image of object and save to database
 """
 def handle_message(msg):
-    if 'capture: gps=' in msg:
+    if 'capture: gps=$GPGGA' in msg:
         gpgga_data = msg.split('gps=')[1]
         try:
             data = parse_gpgga_data(gpgga_data)
@@ -37,6 +40,3 @@ def handle_message(msg):
                           json=payload)
         except:
             print('Error attempting to parse GPGGA string')
-        # data = None
-
-        # capture_image(data)

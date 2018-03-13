@@ -10,11 +10,18 @@ from server.models.warehouse_model import Warehouse
 controls = Blueprint('controls', __name__)
 
 
+"""
+POST an item
+Requires datetime, latitude, longitude in POST body as json
+"""
 @controls.route('/controls/capture', methods=['POST'])
 def capture_image():
     dt = datetime.strptime(request.json.get('datetime'), "%Y-%m-%d %H:%M:%S.%f")
     lat = request.json.get('latitude')
     long = request.json.get('longitude')
+
+    if not all((dt, lat, long)):
+        abort(400, {'message: Missing data for item'})
 
     new_id = db.session.query(db.func.max(Item.id)).scalar() + 1
 
@@ -38,6 +45,10 @@ def capture_image():
     return ''
 
 
+"""
+POST autosort
+Valid status values: 0 (off), 1 (on)
+"""
 @controls.route('/controls/autosort/<int:status>', methods=['POST'])
 def autosort(status):
     if status == 0 or status == 1:
@@ -48,6 +59,9 @@ def autosort(status):
                                'Valid inputs are 0, 1'.format(status)})
 
 
+"""
+POST set position
+"""
 @controls.route('/controls/position/<int:pos>', methods=['POST'])
 def override_position(pos):
     serial_write('ctrl:pos={0}\r'.format(pos))

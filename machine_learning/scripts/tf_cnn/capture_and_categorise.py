@@ -4,41 +4,37 @@ import numpy as np
 import argparse
 import os
 import time
-from label_image import read_tensor_from_image_file, load_label
-
+from label_image import read_tensor_from_image_file, load_labels
 
 # Breaks windows compatibility :X
 import curses
 from curses import wrapper
 import picamera
 
-
+args = None
 
 # https://svds.com/tensorflow-image-recognition-raspberry-pi/
 def load_graph(model_file):
     with tf.Session() as persisted_sess:
+        stdscr.addstr('Model file: ')
+        stdscr.addstr(model_file + '\n')
         graph = tf.Graph()
         graph_def = tf.GraphDef()
         with tf.gfile.FastGFile(model_file, 'rb') as f:
             graph_def.ParseFromString(f.read())
             persisted_sess.graph.as_default()
-            tf.import_graph_def(graph_def, name='')
+            tf.import_graph_def(graph_def)
         return persisted_sess.graph, persisted_sess
 
 def main(stdscr):
-
+    stdscr.clear()
     # Configure the camera
     camera = picamera.PiCamera()
 
     # configure the graph
     graph, session = load_graph(args.model)
     labels = load_labels(args.labels)
-    input_name = 'import/input'
-    output_name = 'import/final_result'
-    input_operation = graph.get_operation_by_name(input_name)
-    output_operation = graph.get_operation_by_name(output_name)
 
-    stdscr.clear()
     while True:
         try:
             key = stdscr.getkey()
@@ -58,8 +54,12 @@ def main(stdscr):
                                             input_mean=128,
                                             input_std=128)
                 # Start benchmarking
+                input_name = "import/input"
+                output_name = "import/final_result"
+                input_operation = graph.get_operation_by_name(input_name)
+                output_operation = graph.get_operation_by_name(output_name)
                 start = time.time()
-                result = session.run(output_operation.outputs[0],
+                results = session.run(output_operation.outputs[0],
                                     {input_operation.outputs[0]: t})
                 end=time.time()
                 results = np.squeeze(results)
@@ -68,6 +68,8 @@ def main(stdscr):
                 for i in top_k:
                     print(labels[i], results[i])
         except Exception as e: 
+            print('Exception occured')
+            print(e)
             pass
 
 

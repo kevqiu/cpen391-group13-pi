@@ -44,7 +44,7 @@ def capture_image():
     db.session.commit()
 
     # return the category id to the DE1
-    serial_write("cat:{0}".format(category_id))
+    serial_write("cat:{0}\r".format(category_id))
     return ''
 
 

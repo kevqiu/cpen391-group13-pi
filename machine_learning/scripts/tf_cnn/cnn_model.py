@@ -65,3 +65,4 @@ class CNNModel:
         normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
         result = self.session.run(normalized)
         return result
+

@@ -96,9 +96,3 @@ if __name__ == '__main__':
     curses.cbreak() # Doesn't require enter keypress
     wrapper(main)
 
-
-
-
-
-    
-

@@ -62,7 +62,7 @@ POST Stop
 """
 @controls.route('/controls/stop', methods=['POST'])
 def stop():
-    serial_write('ctrl/st')
+    serial_write('ctrl/st\r')
     return 'Stopping process'
 
 

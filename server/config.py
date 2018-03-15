@@ -13,6 +13,13 @@ class Config(object):
     # extension configs
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    #  Machine learning configs
+    ML_DIR = '/machine_learning'
+
+    # CNN configs
+    ML_CNN_MODEL_FILE = path.abspath(PROJECT_DIR + ML_DIR + '/tf_files/colour_detect.pb')
+    ML_CNN_LABEL_FILE = path.abspath(PROJECT_DIR + ML_DIR + '/tf_files/colour_detect.txt')
+
 
 class DevConfig(Config):
     """Dev config."""

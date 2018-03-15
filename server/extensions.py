@@ -2,9 +2,12 @@ import sys
 from serial import Serial
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from machine_learning.scripts.tf_cnn.model import CNNModel
+from server import config
 
 db = SQLAlchemy()
 ma = Marshmallow()
+ml = CNNModel(config.DevConfig)
 
 SERIAL_PORT = '/dev/ttyAMA0'
 SERIAL_BAUDRATE = 9600

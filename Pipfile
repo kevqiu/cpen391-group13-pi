@@ -1,0 +1,27 @@
+[[source]]
+
+verify_ssl = true
+name = "pypi"
+url = "https://pypi.python.org/simple"
+
+
+[packages]
+
+image = "*"
+pillow = "*"
+opencv-python = "*"
+tensorflow = "*"
+flask = "*"
+flask-sqlalchemy = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
+pyserial = "*"
+"pynmea2" = "*"
+requests = "*"
+scikit-image = "*"
+imgaug = "*"
+pylint = "*"
+
+
+[dev-packages]
+

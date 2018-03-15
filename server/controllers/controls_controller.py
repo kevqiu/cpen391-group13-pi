@@ -2,10 +2,11 @@ from datetime import datetime
 
 from flask import Blueprint, abort, request
 
-from server.extensions import db, ser
+from server.extensions import db, ser, ml
 from server.helpers.gps_helper import find_closest_warehouse
 from server.models.item_model import Item
 from server.models.warehouse_model import Warehouse
+from camera.camera import camera_capture
 
 controls = Blueprint('controls', __name__)
 
@@ -26,11 +27,19 @@ def capture_image():
     new_id = db.session.query(db.func.max(Item.id)).scalar() + 1
 
     # capture object and save image to storage
-    # capture_image(new_id)
+    image_file = camera_capture(new_id)
 
     # call ML and get category id
-    category_id = 1
-    #category_id = ML GOES HERE
+    # Assuming 1 = Red, 2 = Green, 3 = Blue, 4 = Other
+    category_id = 4
+    (category, confidence) = ml.predict(image_file)
+    category = category.upper()
+    if (category == 'RED'):
+        category_id = 1
+    elif (category == 'GREEN'):
+        category_id = 2
+    elif (category == 'BLUE'):
+        category_id = 3 
 
     # get closest warehouse location
     closest_warehouse = find_closest_warehouse(Warehouse.query.all(), lat, long)
@@ -40,6 +49,7 @@ def capture_image():
                 category_id=category_id,
                 datetime=dt,
                 image_path='\images\{0}.jpeg'.format(new_id))
+                # TODO: Change to image_file?
     db.session.add(item)
     db.session.commit()
     return ''

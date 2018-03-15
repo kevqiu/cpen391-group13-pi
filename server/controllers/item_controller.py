@@ -40,8 +40,9 @@ GET Item Image by ID
 """
 @items.route('/items/<int:id>/image', methods=['GET'])
 def get_item_image(id):
-    path = '{0}\{1}.jpeg'.format(DevConfig.IMG_PATH, id)
-    if os.path.isfile('{0}\{1}.jpeg'.format(DevConfig.IMG_PATH, id)):
-        return send_file(path, mimetype='image/jpeg')
+    img_file = '{0}.jpeg'.format(id)
+    img_path = os.path.join(DevConfig.IMG_PATH, img_file)
+    if os.path.isfile(img_path):
+        return send_file(img_path, mimetype='image/jpeg')
     else:
         return make_response(jsonify({'error': 'Image not found on server'}), 404)

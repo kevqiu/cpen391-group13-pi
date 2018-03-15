@@ -30,7 +30,7 @@ class CNNModel():
         return (self.labels[top_result], results[top_result])
     
     def validate_config(self, config):
-        if (not config.ML_CNN_MODEL_FILE and not config.ML_CNN_LABEL_FILE):
+        if not config.ML_CNN_MODEL_FILE and not config.ML_CNN_LABEL_FILE:
             raise AssertionError('CNN model instantiated with no configuration')
 
     def load_graph(self, model_file):
@@ -52,7 +52,7 @@ class CNNModel():
 
     # Taken from label_image.py
     def read_tensor_from_image_file(self, file_name, input_height=224, input_width=224,
-                input_mean=128, input_std=128):
+                                    input_mean=128, input_std=128):
         input_name = "file_reader"
         output_name = "normalized"
         file_reader = tf.read_file(file_name, input_name)

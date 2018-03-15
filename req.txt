@@ -5,3 +5,6 @@ marshmallow-sqlalchemy
 tensorflow
 scikit-image
 imgaug
+pyserial
+pynmea2
+requests

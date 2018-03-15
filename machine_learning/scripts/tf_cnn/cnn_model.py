@@ -1,7 +1,8 @@
 import tensorflow as tf
 import numpy as np
 
-class CNNModel():
+
+class CNNModel:
 
     def __init__(self, config):
         self.validate_config(config)
@@ -24,9 +25,9 @@ class CNNModel():
         img_tensor = self.read_tensor_from_image_file(image_path)
         results = self.session.run(self.output_operation.outputs[0],
                              {self.input_operation.outputs[0] : img_tensor})
-        print(results)
         results = np.squeeze(results)
         top_result = results.argsort()[-1:][::-1][0]
+        print(self.labels[top_result])
         return (self.labels[top_result], results[top_result])
     
     def validate_config(self, config):

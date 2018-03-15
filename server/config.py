@@ -16,6 +16,8 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     #  Machine learning configs
+    ML_MODEL_TO_USE = 'cnn'
+
     ML_DIR = 'machine_learning'
 
     # CNN configs

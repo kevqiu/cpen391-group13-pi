@@ -5,3 +5,4 @@ marshmallow-sqlalchemy
 pyserial
 pynmea2
 requests
+pyfcm

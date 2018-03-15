@@ -21,7 +21,7 @@ class Config(object):
     ML_DIR = 'machine_learning'
 
     # CNN configs
-    MODEL_DIR =  'tf_files'
+    MODEL_DIR =  'data_files'
     ML_CNN_MODEL_FILE = path.abspath(
         path.join(PROJECT_DIR, ML_DIR, MODEL_DIR, 'colour_detect.pb')
     )

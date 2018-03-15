@@ -49,17 +49,21 @@ def capture_image():
 
 
 """
-POST autosort
-Valid status values: 0 (off), 1 (on)
+POST Autosort
 """
-@controls.route('/controls/autosort/<int:status>', methods=['POST'])
-def autosort(status):
-    if status == 0 or status == 1:
-        serial_write('ctrl/as={0}\r'.format(status))
-        return 'Autosort enabled'
-    else:
-        abort(400, {'message': 'Invalid autosort status: <{0}>. '
-                               'Valid inputs are 0, 1'.format(status)})
+@controls.route('/controls/autosort', methods=['POST'])
+def autosort():
+    serial_write('ctrl/as\r')
+    return 'Beginning autosort'
+
+
+"""
+POST Stop
+"""
+@controls.route('/controls/stop', methods=['POST'])
+def stop():
+    serial_write('ctrl/st')
+    return 'Stopping process'
 
 
 """

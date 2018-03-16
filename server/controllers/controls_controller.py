@@ -76,4 +76,5 @@ def override_position(pos):
 
 
 def serial_write(msg):
-    ser.write(msg.encode('utf-8'))
+    if ser is not None:
+        ser.write(msg.encode('utf-8'))

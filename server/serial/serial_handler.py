@@ -1,4 +1,5 @@
 import requests
+import re
 
 from server.extensions import ser
 from server.helpers.gps_helper import parse_gpgga_data
@@ -25,6 +26,7 @@ Handeles serial messages
 Message types:
 - capture: gps=$GPGGA<gpgga data>
     - calls server to take image of object and save to database
+- done:r=<r_count>,g=<g_count>,g=<g_count>,o=<o_count>
 """
 def handle_message(msg):
     if 'capture: gps=$GPGGA' in msg:
@@ -40,3 +42,11 @@ def handle_message(msg):
                           json=payload)
         except:
             print('Error attempting to parse GPGGA string')
+
+    elif 'done:' in msg:
+        values = re.search('(?<==)\d+', msg)
+        notification_msg = "Sorting complete!\nResults- Red: {0}, Green: {1}, Blue: {2}, Other: {3}"\
+            .format(values[0], values[1], values[2], values[3])
+        print(notification_msg)
+        
+        # call firebase here

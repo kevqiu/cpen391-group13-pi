@@ -10,7 +10,6 @@ from camera.camera import camera_capture
 
 controls = Blueprint('controls', __name__)
 
-
 """
 POST an item
 Requires datetime, latitude, longitude in POST body as json
@@ -28,7 +27,7 @@ def capture_image():
 
     # Rudimentary retry state
     # TODO: Where to store threshold variables
-    max_attempts = 2
+    max_attempts = 3
     confidence_threshold = 0.50
     num_attempts = 0
 
@@ -60,21 +59,28 @@ def capture_image():
                 datetime=dt)
     db.session.add(item)
     db.session.commit()
+
+    # return the category id to the DE1
+    serial_write("cat:{0}\r".format(category_id))
     return ''
 
 
 """
-POST autosort
-Valid status values: 0 (off), 1 (on)
+POST Autosort
 """
-@controls.route('/controls/autosort/<int:status>', methods=['POST'])
-def autosort(status):
-    if status == 0 or status == 1:
-        serial_write('ctrl:as={0}\r'.format(status))
-        return 'Autosort enabled'
-    else:
-        abort(400, {'message': 'Invalid autosort status: <{0}>. '
-                               'Valid inputs are 0, 1'.format(status)})
+@controls.route('/controls/autosort', methods=['POST'])
+def autosort():
+    serial_write('ctrl/as\r')
+    return 'Beginning autosort'
+
+
+"""
+POST Stop
+"""
+@controls.route('/controls/stop', methods=['POST'])
+def stop():
+    serial_write('ctrl/st\r')
+    return 'Stopping process'
 
 
 """
@@ -82,9 +88,10 @@ POST set position
 """
 @controls.route('/controls/position/<int:pos>', methods=['POST'])
 def override_position(pos):
-    serial_write('ctrl:pos={0}\r'.format(pos))
+    serial_write('ctrl/pos={0}\r'.format(pos))
     return 'Set to position ' + str(pos)
 
 
 def serial_write(msg):
-    ser.write(msg.encode('utf-8'))
+    if ser is not None:
+        ser.write(msg.encode('utf-8'))

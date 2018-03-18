@@ -105,3 +105,8 @@ venv.bak/
 .mypy_cache/
 tempCodeRunnerFile.py
 /.idea/
+
+# images
+*.jpeg
+*.jpg
+*.png

@@ -27,8 +27,7 @@ class CNNModel:
                              {self.input_operation.outputs[0] : img_tensor})
         results = np.squeeze(results)
         top_result = results.argsort()[-1:][::-1][0]
-        print(self.labels[top_result])
-        return (self.labels[top_result], results[top_result])
+        return self.labels[top_result], results[top_result]
     
     def validate_config(self, config):
         if not config.ML_CNN_MODEL_FILE and not config.ML_CNN_LABEL_FILE:

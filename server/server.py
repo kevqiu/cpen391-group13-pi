@@ -2,7 +2,7 @@ from flask import Flask
 from threading import Thread
 
 from server.config import DevConfig
-from server.extensions import db, ma
+from server.extensions import db, ma, ml
 
 from server.controllers.category_controller import categories
 from server.controllers.error_controller import error
@@ -10,6 +10,7 @@ from server.controllers.controls_controller import controls
 from server.controllers.warehouse_controller import warehouses
 from server.controllers.item_controller import items
 from server.serial.serial_handler import serial_listener
+from machine_learning.scripts.ml_factory import MLFactory
 
 """ Main app """
 def create_app(config_object=DevConfig):
@@ -22,6 +23,7 @@ def create_app(config_object=DevConfig):
     # Extension init
     db.init_app(app)
     ma.init_app(app)
+    ml.init_model(config_object)
 
     # Blueprint registration
     app.register_blueprint(warehouses)

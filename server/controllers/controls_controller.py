@@ -26,20 +26,30 @@ def capture_image():
 
     new_id = db.session.query(db.func.max(Item.id)).scalar() + 1
 
-    # capture object and save image to storage
-    image_file = camera_capture(new_id)
+    # Rudimentary retry state
+    # TODO: Where to store threshold variables
+    max_attempts = 2
+    confidence_threshold = 0.50
+    num_attempts = 0
 
-    # call ML and get category id
-    # Assuming 1 = Red, 2 = Green, 3 = Blue, 4 = Other
-    category_id = 4
-    (category, confidence) = ml.predict(image_file)
-    category = category.upper()
-    if (category == 'RED'):
-        category_id = 1
-    elif (category == 'GREEN'):
-        category_id = 2
-    elif (category == 'BLUE'):
-        category_id = 3 
+    while num_attempts < max_attempts:
+        # capture object and save image to storage
+        image_file = camera_capture(new_id)
+
+        # call ML and get category id
+        # Assuming 1 = Red, 2 = Green, 3 = Blue, 4 = Other
+        category_id = 4
+        (category, confidence) = ml.predict(image_file)
+        if confidence > confidence_threshold:
+            category = category.upper()
+            if category == 'RED':
+                category_id = 1
+            elif category == 'GREEN':
+                category_id = 2
+            elif category == 'BLUE':
+                category_id = 3
+            break
+        num_attempts += 1
 
     # get closest warehouse location
     closest_warehouse = find_closest_warehouse(Warehouse.query.all(), lat, long)
@@ -47,9 +57,7 @@ def capture_image():
     # save item in DB
     item = Item(warehouse_id=closest_warehouse.id,
                 category_id=category_id,
-                datetime=dt,
-                image_path='\images\{0}.jpeg'.format(new_id))
-                # TODO: Change to image_file?
+                datetime=dt)
     db.session.add(item)
     db.session.commit()
     return ''

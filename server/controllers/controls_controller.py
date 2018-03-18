@@ -2,11 +2,10 @@ from datetime import datetime
 
 from flask import Blueprint, abort, request
 
-from server.extensions import db, ser, ml
+from server.extensions import db, ser, ml, ca
 from server.helpers.gps_helper import find_closest_warehouse
 from server.models.item_model import Item
 from server.models.warehouse_model import Warehouse
-from camera.camera import camera_capture
 
 controls = Blueprint('controls', __name__)
 
@@ -33,7 +32,7 @@ def capture_image():
 
     while num_attempts < max_attempts:
         # capture object and save image to storage
-        image_file = camera_capture(new_id)
+        image_file = ca.capture(new_id)
 
         # call ML and get category id
         # Assuming 1 = Red, 2 = Green, 3 = Blue, 4 = Other

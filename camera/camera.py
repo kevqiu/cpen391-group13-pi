@@ -23,6 +23,7 @@ class Camera:
         if os.uname()[4].startswith('arm'):
             camera = picamera.PiCamera()
             camera.capture(name)
+            camera.close()
         else:
             camera = cv2.VideoCapture(0)
             time.sleep(0.1)

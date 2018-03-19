@@ -2,7 +2,7 @@ from flask import Flask
 from threading import Thread
 
 from server.config import DevConfig
-from server.extensions import db, ma
+from server.extensions import db, ma, ml, ca
 
 from server.controllers.category_controller import categories
 from server.controllers.error_controller import error
@@ -22,6 +22,8 @@ def create_app(config_object=DevConfig):
     # Extension init
     db.init_app(app)
     ma.init_app(app)
+    ml.init_model(config_object)
+    ca.init_camera(config_object.IMG_PATH)
 
     # Blueprint registration
     app.register_blueprint(warehouses)

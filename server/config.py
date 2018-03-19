@@ -6,12 +6,28 @@ class Config(object):
 
     # directory configs
     PROJECT_DIR = path.dirname(path.dirname(path.abspath(__file__)))
-    DB_DIR = '\\db\\database.db'
-    DB_PATH = path.abspath(PROJECT_DIR + DB_DIR)
-    IMG_PATH = path.abspath(PROJECT_DIR + '\\images')
+    DB_DIR = 'db'
+    DB_FILE = 'database.db'
+    DB_PATH = path.abspath(path.join(PROJECT_DIR, DB_DIR, DB_FILE))
+    IMG_DIR = 'images'
+    IMG_PATH = path.abspath(path.join(PROJECT_DIR, IMG_DIR))
 
     # extension configs
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    #  Machine learning configs
+    ML_MODEL_TO_USE = 'cnn'
+
+    ML_DIR = 'machine_learning'
+
+    # CNN configs
+    MODEL_DIR =  'data_files'
+    ML_CNN_MODEL_FILE = path.abspath(
+        path.join(PROJECT_DIR, ML_DIR, MODEL_DIR, 'colour_detect.pb')
+    )
+    ML_CNN_LABEL_FILE = path.abspath(
+        path.join(PROJECT_DIR, ML_DIR, MODEL_DIR, 'colour_detect.txt')
+    )
 
 
 class DevConfig(Config):

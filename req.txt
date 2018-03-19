@@ -1,8 +1,0 @@
-flask
-flask_sqlalchemy
-flask-marshmallow
-marshmallow-sqlalchemy
-pyserial
-pynmea2
-requests
-pyfcm

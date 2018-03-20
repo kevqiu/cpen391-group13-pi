@@ -45,8 +45,13 @@ def handle_message(msg):
 
     elif 'done:' in msg:
         values = re.search('(?<==)\d+', msg)
-        notification_msg = "Sorting complete!\nResults- Red: {0}, Green: {1}, Blue: {2}, Other: {3}"\
-            .format(values[0], values[1], values[2], values[3])
-        print(notification_msg)
-        
-        # call firebase here
+
+        payload = {
+            'red': values[0],
+            'green': values[1],
+            'blue': values[2],
+            'other': values[3]
+        }
+
+        requests.post('http://localhost:5000/notify',
+                          json=payload)

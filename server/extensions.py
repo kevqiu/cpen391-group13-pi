@@ -4,11 +4,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from machine_learning.scripts.ml_factory import MLFactory
 from camera.camera import Camera
+from server.fcm.fcm import FCM
 
 db = SQLAlchemy()
 ma = Marshmallow()
 ml = MLFactory()
 ca = Camera()
+fcm = FCM()
 
 SERIAL_PORT = '/dev/ttyAMA0'
 SERIAL_BAUDRATE = 9600

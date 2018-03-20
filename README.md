@@ -4,8 +4,9 @@
 
 Dependencies are managed through [pipenv](https://github.com/pypa/pipenv).
 
-We are using `python` = `3.4.4`
 
+For Raspberry Pi:
+We are using `python` = `3.4.4`
 with:
 
     `tensorflow` = `1.1.0`
@@ -16,7 +17,6 @@ which only supports `python 3.4.4`.
 Unfortunately `numpy-extensions > 1.11.0` does not work properly on `python 3.4.4`
 so we are locked to `numpy 1.11.0` for the time being as well.
 
-For Raspberry Pi:
 1. Download the Tensorflow 1.1.0 wheel from [here](https://github.com/samjabrahams/tensorflow-on-raspberry-pi/releases/download/v1.1.0/tensorflow-1.1.0-cp34-cp34m-linux_armv7l.whl) and place it in the project root directory.
 1. Edit the Pipfile:
     1. Comment out `tensorflow = "==1.1.0"`
@@ -31,8 +31,14 @@ For Linux:
 1. run `pipenv install --skip-lock` 
 
 For Windows:
-1. TODO: Get Tensorflow Windows installation working.
-
+1. Edit the Pipfile:
+    1. Comment out `tensorflow = "==1.1.0"
+    1. Comment out `"c0a73bc" = {path = "./tensorflow...whl"}`
+    1. Install the version of [Tensorflow](https://pypi.python.org/pypi/tensorflow) which corresponds to your environment. With `pipenv install <wheel_file_name>.whl`. 
+        + `tensorflow-1.5.1-cp35-cp35m-win_amd64.whl (md5)`
+            + `tensorflow-1.5.1`: Tensorflow version 1.5
+            + `cp35`: for Python3.5
+            + `win_amd64`: for Windows 64-bit. 
 
 ## RUNNING INSTRUCTIONS
 

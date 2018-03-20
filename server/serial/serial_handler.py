@@ -1,7 +1,8 @@
-import requests
 import re
 
-from server.extensions import ser
+import requests
+
+from server.modules import sc
 from server.helpers.gps_helper import parse_gpgga_data
 
 """ 
@@ -11,14 +12,15 @@ Calls handle_message when a \r is received
 """
 def serial_listener():
     msg = ''
-    while True:
-        for c in ser.read():
-            char = chr(c)
-            msg += char
-            if char == '\r':
-                print('Serial message received: ' + msg)
-                handle_message(msg)
-                msg = ''
+    if sc.serial is not None:
+        while True:
+            for c in sc.serial.read():
+                char = chr(c)
+                msg += char
+                if char == '\r':
+                    print('Serial message received: ' + msg)
+                    handle_message(msg)
+                    msg = ''
 
 
 """ 

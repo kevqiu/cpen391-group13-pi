@@ -12,12 +12,15 @@ class Config(object):
     IMG_DIR = 'images'
     IMG_PATH = path.abspath(path.join(PROJECT_DIR, IMG_DIR))
 
+    # serial configs
+    SERIAL_PORT = '/dev/ttyAMA0'
+    SERIAL_BAUDRATE = 9600
+
     # extension configs
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     #  Machine learning configs
     ML_MODEL_TO_USE = 'cnn'
-
     ML_DIR = 'machine_learning'
 
     # CNN configs

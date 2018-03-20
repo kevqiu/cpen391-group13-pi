@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 
-from server.extensions import fcm
+from server.modules import fcm
 
 notifications = Blueprint('notifications', __name__)
 

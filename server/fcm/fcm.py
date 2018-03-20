@@ -12,5 +12,4 @@ class FCM:
 
 
     def send_notification(self, topic, message):
-        print("hello")
         self.push_service.notify_topic_subscribers(topic_name=topic, message_body=message)

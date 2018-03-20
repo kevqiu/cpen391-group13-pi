@@ -16,15 +16,15 @@ so we are locking us to `numpy 1.11.0` for the time being as well.
 For Raspberry Pi:
 1. Download the Tensorflow 1.1.0 wheel from [here](https://github.com/samjabrahams/tensorflow-on-raspberry-pi/releases/download/v1.1.0/tensorflow-1.1.0-cp34-cp34m-linux_armv7l.whl) and place it in the project root directory.
 1. Edit the Pipfile:
-..1. Comment out `tensorflow = "==1.1.0"`
-..1. Comment out `opencv-python = "*"`
-..1. Uncomment `"c0a73bc" = {path = "./tensorflow...whl"}`
+    1. Comment out `tensorflow = "==1.1.0"`
+    1. Comment out `opencv-python = "*"`
+    1. Uncomment `"c0a73bc" = {path = "./tensorflow...whl"}`
 1. run `pipenv install --skip-lock` 
 
 For Linux:
-1.Edit the Pipfile
-..1. Comment out `"c0a73bc" = {path = "./tensorflow...whl"}`
-..1. Uncommment any other line
+1. Edit the Pipfile:
+    1. Comment out `"c0a73bc" = {path = "./tensorflow...whl"}`
+    1. Uncommment any other line
 1. run `pipenv install --skip-lock` 
 
 For Windows:

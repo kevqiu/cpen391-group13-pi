@@ -2,16 +2,19 @@
 
 ## INSTALLATION INSTRUCTIONS
 
-Dependencies are managed through [pipenv](https://github.com/pypa/pipenv). 
+Dependencies are managed through [pipenv](https://github.com/pypa/pipenv).
+
 We are using `python` = `3.4.4`
+
 with:
+
     `tensorflow` = `1.1.0`
     `numpy` = `1.11.0`
 
 This is due to the available pre-compiled Tensorflow wheel for Pi being `1.1.0`
 which only supports `python 3.4.4`.
 Unfortunately numpy-extensions > 1.11.0 does not work properly on `python 3.4.4`
-so we are locking us to `numpy 1.11.0` for the time being as well.
+so we are locked to `numpy 1.11.0` for the time being as well.
 
 For Raspberry Pi:
 1. Download the Tensorflow 1.1.0 wheel from [here](https://github.com/samjabrahams/tensorflow-on-raspberry-pi/releases/download/v1.1.0/tensorflow-1.1.0-cp34-cp34m-linux_armv7l.whl) and place it in the project root directory.

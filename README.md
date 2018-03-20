@@ -13,7 +13,7 @@ with:
 
 This is due to the available pre-compiled Tensorflow wheel for Pi being `1.1.0`
 which only supports `python 3.4.4`.
-Unfortunately numpy-extensions > 1.11.0 does not work properly on `python 3.4.4`
+Unfortunately `numpy-extensions > 1.11.0` does not work properly on `python 3.4.4`
 so we are locked to `numpy 1.11.0` for the time being as well.
 
 For Raspberry Pi:

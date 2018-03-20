@@ -9,7 +9,11 @@ from label_image import read_tensor_from_image_file, load_labels
 # Breaks windows compatibility :X
 import curses
 from curses import wrapper
-import picamera
+
+# Excuse the crummy import
+import sys
+sys.path.append('/home/valerian/Programming/cpen391-group13-pi/camera')
+from camera import Camera
 
 args = None
 
@@ -27,7 +31,11 @@ def load_graph(model_file):
 def main(stdscr):
     stdscr.clear()
     # Configure the camera
-    camera = picamera.PiCamera()
+    # camera = picamera.PiCamera()
+    # camera = cv2.VideoCapture(0)
+    # time.sleep(0.1)
+    camera = Camera()
+    camera.init_camera('/tmp')
 
     # configure the graph
     graph, session = load_graph(args.model)
@@ -43,11 +51,8 @@ def main(stdscr):
                 break
             if str(key) == 'c':
                 stdscr.clear()
-                camera.start_preview()
-                time.sleep(2)
-                camera.capture('test.jpg')
-                camera.stop_preview()
-                t = read_tensor_from_image_file('test.jpg',
+                camera.capture('test')
+                t = read_tensor_from_image_file('/tmp/test.jpeg',
                                             input_height=224,
                                             input_width=224,
                                             input_mean=128,

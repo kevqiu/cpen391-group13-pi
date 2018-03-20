@@ -1,24 +1,29 @@
+from imgaug import augmenters as iaaa
 import cv2
-import argparse
-import os
+import glob
 
-def save_video_frames(video_in, image_dir, image_prefix, frame_offset=1):
+# Image augmenter
+seq = iaaa.Sequential(
+    [
+        iaa.Fliplr(0.5),
+
+
+
+
+
+def augment_images(image_dir):
     """
     Takes in a video file and saves each frame as an image in the
     directory provided.
 
     Args:
-        video_in: string path to the video input
         image_dir: the directory to store images into
-        frame_offset: defines how many frames to skip before saving the next image
     """
-    print('Analyzing file: ' + video_in)
-    print('Storing in directory: ' + image_dir)
-    print('Frame offset: ' + str(frame_offset))
-    vidcap = cv2.VideoCapture(video_in)
-    success, image = vidcap.read()
-    filename_count = 0
-    frame_count = 0
+    # TODO: Fix to adhere to proper directory structure
+    images_filenames = glob.glob(image_dir + '/*.jpg')
+    for image in images_filenames:
+        
+
     while success:
         success,image = vidcap.read()
         frame_count += 1

@@ -6,6 +6,7 @@ Dependencies are managed through [pipenv](https://github.com/pypa/pipenv).
 
 
 For Raspberry Pi:
+
 We are using `python` = `3.4.4`
 with:
 
@@ -32,7 +33,7 @@ For Linux:
 
 For Windows:
 1. Edit the Pipfile:
-    1. Comment out `tensorflow = "==1.1.0"
+    1. Comment out `tensorflow = "==1.1.0"`
     1. Comment out `"c0a73bc" = {path = "./tensorflow...whl"}`
     1. Install the version of [Tensorflow](https://pypi.python.org/pypi/tensorflow) which corresponds to your environment. With `pipenv install <wheel_file_name>.whl`. 
         + `tensorflow-1.5.1-cp35-cp35m-win_amd64.whl (md5)`

@@ -1,5 +1,5 @@
 from machine_learning.scripts.tf_cnn.cnn_model import CNNModel
-from machine_learning.sklearn_clustering.kmean_clst_model import ClusterModel
+from machine_learning.scripts.sklearn_clustering.kmean_clst_model import ClusterModel
 class MLFactory():
 
     def __init__(self):
@@ -18,8 +18,9 @@ class MLFactory():
         if model_str == 'cnn':
             self.model = CNNModel(config)
 
-	else if model_str == 'clst'
-		self.model = ClusterModel(config)
+        elif model_str == 'clst':
+            self.model = ClusterModel(config)
+
         else:
             raise ValueError('No matching model found, currently'
                              'supports: cnn and clustering')

@@ -32,9 +32,17 @@ For Linux:
 1. run `pipenv install --skip-lock` 
 
 For Windows:
+1. Check if your Python version is running on 64-bit arch, re-install if it isn't
+    1. Run the following in a Python shell to check
+        ```
+        >>> import platform
+        >>> platform.architecture()
+        ```
 1. Edit the Pipfile:
     1. Comment out `tensorflow = "==1.1.0"`
     1. Comment out `"c0a73bc" = {path = "./tensorflow...whl"}`
+    1. Run `pipenv install`. Terminate if the last one hangs
+        1. Run `pip install --upgrade tensorflow` if it hung
     1. Install the version of [Tensorflow](https://pypi.python.org/pypi/tensorflow) which corresponds to your environment. With `pipenv install <wheel_file_name>.whl`. 
         + `tensorflow-1.5.1-cp35-cp35m-win_amd64.whl (md5)`
             + `tensorflow-1.5.1`: Tensorflow version 1.5

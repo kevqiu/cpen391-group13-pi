@@ -45,7 +45,7 @@ def handle_message(msg):
             print('Error attempting to parse GPGGA string')
 
     elif 'done:' in msg:
-        values = re.search('(?<==)\d+', msg)
+        values = re.findall('(?<==)\d+', msg)
 
         payload = {
             'red': values[0],

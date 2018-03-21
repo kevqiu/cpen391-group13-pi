@@ -22,7 +22,8 @@ def capture_image():
     if not all((dt, lat, long)):
         abort(400, {'message: Missing data for item'})
 
-    new_id = db.session.query(db.func.max(Item.id)).scalar() + 1
+    highest_id = db.session.query(db.func.max(Item.id)).scalar()
+    new_id =  1 if highest_id is None else highest_id + 1
 
     # Rudimentary retry state
     # TODO: Where to store threshold variables
@@ -92,5 +93,5 @@ def override_position(pos):
 
 
 def serial_write(msg):
-    if sc is not None:
-        sc.serial.write(msg.encode('utf-8'))
+    if ser is not None:
+        ser.write(msg.encode('utf-8'))

@@ -40,6 +40,7 @@ data = [
     Category(category='red'),
     Category(category='green'),
     Category(category='blue'),
+    Category(category='other'),
 
-    Item(warehouse_id=1, category_id=1, datetime=datetime.now())
+    # Item(warehouse_id=1, category_id=1, datetime=datetime.now())
 ]

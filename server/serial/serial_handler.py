@@ -1,8 +1,7 @@
+import requests
 import re
 
-import requests
-
-from server.modules import sc
+from server.modules import ser
 from server.helpers.gps_helper import parse_gpgga_data
 
 """ 
@@ -12,9 +11,9 @@ Calls handle_message when a \r is received
 """
 def serial_listener():
     msg = ''
-    if sc.serial is not None:
+    if ser is not None:
         while True:
-            for c in sc.serial.read():
+            for c in ser.read():
                 char = chr(c)
                 msg += char
                 if char == '\r':
@@ -46,7 +45,7 @@ def handle_message(msg):
             print('Error attempting to parse GPGGA string')
 
     elif 'done:' in msg:
-        values = re.search('(?<==)\d+', msg)
+        values = re.findall('(?<==)\d+', msg)
 
         payload = {
             'red': values[0],

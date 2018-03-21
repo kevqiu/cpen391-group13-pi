@@ -6,23 +6,23 @@ url = "https://pypi.python.org/simple"
 
 
 [packages]
-
+flask = "*"
+pylint = "*"
 image = "*"
 pillow = "*"
 opencv-python = "*"
-tensorflow = "1.1.0"
-flask = "*"
 flask-sqlalchemy = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 pyserial = "*"
 "pynmea2" = "*"
 requests = "*"
-scikit-image = "*"
-imgaug = "*"
-pylint = "*"
 pyfcm = "*"
-
+numpy = "==1.11.*"
+#tensorflow = "==1.1.0"
+"c0a73bc" = {path = "./tensorflow-1.1.0-cp34-cp34m-linux_armv7l.whl"}
 
 [dev-packages]
+#scikit-image = "*"
+#imgaug = "*"
 

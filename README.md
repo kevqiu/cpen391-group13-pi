@@ -25,21 +25,24 @@ so we are locked to `numpy 1.11.0` for the time being as well.
     1. Uncomment `"c0a73bc" = {path = "./tensorflow...whl"}`
 1. run `pipenv install --skip-lock` 
 
-For Linux:
+### For Linux:
 1. Edit the Pipfile:
     1. Comment out `"c0a73bc" = {path = "./tensorflow...whl"}`
     1. Uncommment any other line
 1. run `pipenv install --skip-lock` 
 
-For Windows:
+### For Windows (in PowerShell):
+1. Check if your Python version is running on 64-bit arch, re-install if it isn't
+    1. Run the following in a Python shell to check
+        `>>> import platform`
+        `>>> platform.architecture()`
 1. Edit the Pipfile:
+    1. Comment out `numpy = "==1.11.*"`
     1. Comment out `tensorflow = "==1.1.0"`
     1. Comment out `"c0a73bc" = {path = "./tensorflow...whl"}`
-    1. Install the version of [Tensorflow](https://pypi.python.org/pypi/tensorflow) which corresponds to your environment. With `pipenv install <wheel_file_name>.whl`. 
-        + `tensorflow-1.5.1-cp35-cp35m-win_amd64.whl (md5)`
-            + `tensorflow-1.5.1`: Tensorflow version 1.5
-            + `cp35`: for Python3.5
-            + `win_amd64`: for Windows 64-bit. 
+    1. Run `pipenv shell`
+    1. Run `pipenv install --skip-lock`
+    1. Run `pipenv install --upgrade tensorflow`
 
 ## RUNNING INSTRUCTIONS
 

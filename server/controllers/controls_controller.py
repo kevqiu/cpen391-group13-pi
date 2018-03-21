@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import Blueprint, abort, request
 
-from server.modules import db, sc
+from server.modules import db, ser, ml, ca
 from server.helpers.gps_helper import find_closest_warehouse
 from server.models.item_model import Item
 from server.models.warehouse_model import Warehouse
@@ -92,5 +92,5 @@ def override_position(pos):
 
 
 def serial_write(msg):
-    if sc.serial is not None:
-        sc.serial.write(msg.encode('utf-8'))
+    if ser is not None:
+        ser.write(msg.encode('utf-8'))

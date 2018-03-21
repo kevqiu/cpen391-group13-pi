@@ -10,7 +10,7 @@ class SerialConnection:
 
     def init_serial(self, port, baudrate):
         try:
-            self.serial = Serial(port, baudrate)
+            self.serial = Serial(port=port, baudrate=baudrate)
             print('Serial port opened successfully!')
         except:
             print('\nSerial port failed to be opened!\n', file=sys.stderr)

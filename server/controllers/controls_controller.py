@@ -92,5 +92,5 @@ def override_position(pos):
 
 
 def serial_write(msg):
-    if sc is not None:
+    if sc.serial is not None:
         sc.serial.write(msg.encode('utf-8'))

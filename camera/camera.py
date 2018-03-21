@@ -19,7 +19,6 @@ class Camera:
         # Running on the pi
         name = str(img_id) + '.jpeg'
         name = os.path.join(self.img_dir, name)
-        print(name)
         if os.uname()[4].startswith('arm'):
             camera = picamera.PiCamera()
             camera.capture(name)

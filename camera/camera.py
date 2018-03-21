@@ -1,7 +1,8 @@
+import platform 
 import os
 import time
 
-if os.uname()[4].startswith('arm'):
+if platform.uname()[4].startswith('arm'):
     # Running on the pi
     import picamera 
 else:
@@ -16,10 +17,10 @@ class Camera:
         self.img_dir = img_dir
 
     def capture(self, img_id):
-        # Running on the pi
         name = str(img_id) + '.jpeg'
         name = os.path.join(self.img_dir, name)
-        if os.uname()[4].startswith('arm'):
+        if platform.uname()[4].startswith('arm'):
+            # Running on the pi
             camera = picamera.PiCamera()
             camera.capture(name)
             camera.close()

@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import Flask
 
 from server.config import DevConfig
-from server.extensions import db
+from server.modules import db
 from server.models.category_model import Category
 from server.models.item_model import Item
 from server.models.warehouse_model import Warehouse
@@ -40,6 +40,7 @@ data = [
     Category(category='red'),
     Category(category='green'),
     Category(category='blue'),
+    Category(category='other'),
 
-    Item(warehouse_id=1, category_id=1, datetime=datetime.now())
+    # Item(warehouse_id=1, category_id=1, datetime=datetime.now())
 ]

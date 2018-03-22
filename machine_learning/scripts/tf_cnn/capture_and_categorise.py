@@ -53,12 +53,12 @@ def main(stdscr):
                 stdscr.clear()
                 camera.capture('test')
                 t = read_tensor_from_image_file('/tmp/test.jpeg',
-                                            input_height=224,
-                                            input_width=224,
+                                            input_height=299,
+                                            input_width=299,
                                             input_mean=128,
                                             input_std=128)
                 # Start benchmarking
-                input_name = "import/input"
+                input_name = "import/Mul"
                 output_name = "import/final_result"
                 input_operation = graph.get_operation_by_name(input_name)
                 output_operation = graph.get_operation_by_name(output_name)

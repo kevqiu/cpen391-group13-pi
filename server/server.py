@@ -2,7 +2,8 @@ from flask import Flask
 from threading import Thread
 
 from server.config import DevConfig
-from server.extensions import db, ma, ml, ca
+from server.controllers.notification_controller import notifications
+from server.modules import db, ma, ml, ca, fcm
 
 from server.controllers.category_controller import categories
 from server.controllers.error_controller import error
@@ -24,12 +25,14 @@ def create_app(config_object=DevConfig):
     ma.init_app(app)
     ml.init_model(config_object)
     ca.init_camera(config_object.IMG_PATH)
+    fcm.init_push_service(config_object.FCM_API_KEY)
 
     # Blueprint registration
     app.register_blueprint(warehouses)
     app.register_blueprint(categories)
     app.register_blueprint(items)
     app.register_blueprint(controls)
+    app.register_blueprint(notifications)
     app.register_blueprint(error)
 
     # Begin Serial thread

@@ -2,7 +2,6 @@ from flask import Flask
 from threading import Thread
 
 from server.config import DevConfig
-from server.controllers.notification_controller import notifications
 from server.modules import db, ma, ml, ca, fcm
 
 from server.controllers.category_controller import categories
@@ -10,6 +9,8 @@ from server.controllers.error_controller import error
 from server.controllers.controls_controller import controls
 from server.controllers.warehouse_controller import warehouses
 from server.controllers.item_controller import items
+from server.controllers.cycle_controller import cycles
+from server.controllers.notification_controller import notifications
 from server.serial.serial_handler import serial_listener
 
 """ Main app """
@@ -30,6 +31,7 @@ def create_app(config_object=DevConfig):
     # Blueprint registration
     app.register_blueprint(warehouses)
     app.register_blueprint(categories)
+    app.register_blueprint(cycles)
     app.register_blueprint(items)
     app.register_blueprint(controls)
     app.register_blueprint(notifications)

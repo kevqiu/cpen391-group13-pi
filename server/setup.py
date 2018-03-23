@@ -1,8 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import Flask
 
 from server.config import DevConfig
+from server.models.cycle_model import Cycle
 from server.modules import db
 from server.models.category_model import Category
 from server.models.item_model import Item
@@ -42,5 +43,10 @@ data = [
     Category(category='blue'),
     Category(category='other'),
 
-    # Item(warehouse_id=1, category_id=1, datetime=datetime.now())
+    Cycle(start_time=datetime.now() - timedelta(days=1), end_time=datetime.now()),
+
+    Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=3)),
+    Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=2)),
+    Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=1)),
+    Item(warehouse_id=1, category_id=1, datetime=datetime.now()),
 ]

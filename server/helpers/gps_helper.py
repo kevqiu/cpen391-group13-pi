@@ -35,3 +35,16 @@ def find_closest_warehouse(warehouses, latitude, longitude):
             closest_warehouse = w
 
     return closest_warehouse
+
+"""
+Converts DMM coordinates to Degree Decimals
+Input: DDMM.MMMM,C or DDDMM.MMMM,C
+"""
+def convert_dmm_to_dd(coord):
+    (dm, card) = coord.split(',')
+
+    dir = 1 if card == 'N' or card == 'E' else -1
+    d = dm[:dm.index('.') - 2]
+    m = dm[dm.index('.') - 2:]
+
+    return (int(d) + float(m) / 60) * dir

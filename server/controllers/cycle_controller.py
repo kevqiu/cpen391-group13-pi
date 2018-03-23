@@ -24,24 +24,38 @@ def get_cycle(id):
 
 """
 POST a cycle
-Requires start and end time, start must be before end
+Requires start time, body must not include +XX:XX, no support for RFC 3339 format
 """
 @cycles.route('/cycles', methods=['POST'])
 def create_cycle():
     start = request.json.get('start_time')
-    end = request.json.get('end_time')
 
-    if not all ({start, end}):
-        abort(400, {'message: Missing data for cycle'})
+    if not start:
+        abort(400, {'message': 'Start time missing from body'})
 
     start_time = datetime.strptime(start.split('+')[0], "%Y-%m-%dT%H:%M:%S.%f")
-    end_time = datetime.strptime(end.split('+')[0], "%Y-%m-%dT%H:%M:%S.%f")
 
-    if start_time > end_time:
-        abort(400, {'message': 'Start time cannot be past end time'})
-
-    cycle = Cycle(start_time=start_time, end_time=end_time)
+    cycle = Cycle(start_time=start_time, end_time=start_time)
     db.session.add(cycle)
     db.session.commit()
 
-    return 'Cycle created with Start Time = {} and End Time = {}'.format(start_time, end_time)
+    return 'Cycle created with Start Time = {}'.format(start_time)
+
+
+"""
+PATCH a Cycle
+Requires end time, body must not include +XX:XX, no support for RFC 3339 format
+"""
+@cycles.route('/cycles/<int:id>', methods=['PATCH'])
+def patch_cycle(id):
+    end = request.json.get('end_time')
+
+    if not end:
+        abort(400, {'message': 'End time missing from body'})
+
+    end_time = datetime.strptime(end.split('+')[0], "%Y-%m-%dT%H:%M:%S.%f")
+
+    Cycle.query.filter(Cycle.id == id).update({'end_time': end_time})
+    db.session.commit()
+
+    return 'Cycle updated successfully'

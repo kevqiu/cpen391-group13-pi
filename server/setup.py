@@ -32,7 +32,7 @@ def init_db(config_object=DevConfig):
 
     print('Database successfully initialized!')
 
-# dummy data that database uses to populate
+# data that database uses to populate
 data = [
     Warehouse(location='UBC', latitude=49.2616035, longitude='-123.2498017'),
     Warehouse(location='UofT', latitude=43.6600823, longitude='-79.39534'),

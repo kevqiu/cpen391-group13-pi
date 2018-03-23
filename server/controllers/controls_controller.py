@@ -15,12 +15,14 @@ Requires datetime, latitude, longitude in POST body as json
 """
 @controls.route('/controls/capture', methods=['POST'])
 def capture_image():
-    dt = datetime.strptime(request.json.get('datetime'), "%Y-%m-%d %H:%M:%S.%f")
+    dt = request.json.get('datetime')
     lat = request.json.get('latitude')
     long = request.json.get('longitude')
 
     if not all((dt, lat, long)):
-        abort(400, {'message: Missing data for item'})
+        abort(400, {'message': 'Missing data for item'})
+
+    timestamp = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S.%f")
 
     highest_id = db.session.query(db.func.max(Item.id)).scalar()
     new_id =  1 if highest_id is None else highest_id + 1
@@ -56,7 +58,7 @@ def capture_image():
     # save item in DB
     item = Item(warehouse_id=closest_warehouse.id,
                 category_id=category_id,
-                datetime=dt)
+                datetime=timestamp)
     db.session.add(item)
     db.session.commit()
 

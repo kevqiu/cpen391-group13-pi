@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, abort, json
 
 from server.models.cycle_model import Cycle, CycleSchema
 from server.modules import db
@@ -38,8 +38,13 @@ def create_cycle():
     cycle = Cycle(start_time=start_time, end_time=start_time)
     db.session.add(cycle)
     db.session.commit()
+    db.session.flush()
 
-    return 'Cycle created with Start Time = {}'.format(start_time)
+    response = {
+        'id': cycle.id,
+        'message': 'Cycle created with Start Time = {}'.format(start_time)
+    }
+    return json.dumps(response)
 
 
 """

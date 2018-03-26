@@ -41,9 +41,9 @@ def handle_message(msg):
         payload = {
             'start_time': dt_string
         }
-        cycle_id = requests.post('http://localhost:5000/cycles',
+        response = requests.post('http://localhost:5000/cycles',
                       json=payload)
-        serial_write('cycle_id={}'.format(cycle_id))
+        serial_write('cycle_id={}'.format(response.json().id))
 
     elif 'capture:' in msg:
         args = re.findall(r'(?<==)\S*', msg)

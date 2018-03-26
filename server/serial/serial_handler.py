@@ -43,7 +43,7 @@ def handle_message(msg):
         }
         response = requests.post('http://localhost:5000/cycles',
                       json=payload)
-        serial_write('cycle_id={}'.format(response.json().id))
+        serial_write('cycle_id={}'.format(response.json()['id']))
 
     elif 'capture:' in msg:
         args = re.findall(r'(?<==)\S*', msg)
@@ -65,7 +65,7 @@ def handle_message(msg):
         dt = datetime.now().replace(hour=h, minute=m, second=s)
         dt_string = dt.strftime("%Y-%m-%d %H:%M:%S.%f")
 
-        cycle_id = int(re.findall(r'cycle_id=\d+', msg)[0].split('='))
+        cycle_id = int(re.findall(r'cycle_id=\d+', msg)[0].split('=')[1])
 
         payload = {
             'end_time': dt_string

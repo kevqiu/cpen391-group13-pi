@@ -24,7 +24,7 @@ def get_cycle(id):
 
 """
 POST a cycle
-Requires start time, body must not include +XX:XX, no support for RFC 3339 format
+Requires start time
 """
 @cycles.route('/cycles', methods=['POST'])
 def create_cycle():
@@ -33,7 +33,7 @@ def create_cycle():
     if not start:
         abort(400, {'message': 'Start time missing from body'})
 
-    start_time = datetime.strptime(start.split('+')[0], "%Y-%m-%d %H:%M:%S.%f")
+    start_time = datetime.strptime(start.split('+')[0].replace('T', ' '), "%Y-%m-%d %H:%M:%S.%f")
 
     cycle = Cycle(start_time=start_time, end_time=start_time)
     db.session.add(cycle)
@@ -49,7 +49,7 @@ def create_cycle():
 
 """
 PATCH a Cycle
-Requires end time, body must not include +XX:XX, no support for RFC 3339 format
+Requires end time
 """
 @cycles.route('/cycles/<int:id>', methods=['PATCH'])
 def patch_cycle(id):
@@ -58,7 +58,7 @@ def patch_cycle(id):
     if not end:
         abort(400, {'message': 'End time missing from body'})
 
-    end_time = datetime.strptime(end.split('+')[0], "%Y-%m-%d %H:%M:%S.%f")
+    end_time = datetime.strptime(end.split('+')[0].replace('T', ' '), "%Y-%m-%d %H:%M:%S.%f")
 
     Cycle.query.filter(Cycle.id == id).update({'end_time': end_time})
     db.session.commit()

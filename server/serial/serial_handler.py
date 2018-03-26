@@ -78,7 +78,7 @@ def handle_message(msg):
         cycle['end_time'] = cycle['end_time'].replace('T', ' ').split('+')[0]
 
         # get all the items scanned during the cycle and notify FCM
-        items = len(requests.get('http://localhost:5000/items?between={},{}'.format(cycle['start_time'], cycle['end_time'])).json())
+        items = requests.get('http://localhost:5000/items?between={},{}'.format(cycle['start_time'], cycle['end_time'])).json()
         counts = [0, 0, 0, 0]
         for i in items:
             counts[int(i['category_id']) + 1] += 1

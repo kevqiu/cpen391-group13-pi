@@ -72,8 +72,10 @@ def handle_message(msg):
         }
         requests.patch('http://localhost:5000/cycles/{}'.format(cycle_id), json=payload)
 
-        # fetch the newly updated cycle
+        # fetch the newly updated cycle and manipulate data for queries
         cycle = requests.get('http://localhost:5000/cycles/{}'.format(cycle_id)).json()
+        cycle['start_time'] = cycle['start_time'].replace('T', ' ').split('+')[0]
+        cycle['end_time'] = cycle['end_time'].replace('T', ' ').split('+')[0]
 
         # get all the items scanned during the cycle and notify FCM
         red_item_count = len(requests.get('http://localhost:5000/items?category_id={}&between={},{}'.format(1, cycle['start_time'], cycle['end_time'])).json())

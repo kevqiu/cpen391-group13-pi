@@ -14,7 +14,8 @@ GET All Items
 Support filtering: 
     - warehouse_id: int
     - category_id: int
-    - between: DT,DT (query is parsed to remove +XX:XX and T delimiter)
+    - between: YY-mm-ddTHH:MM:SS.fffff,YY-mm-ddTHH:MM:SS.fffff
+        (exclude the timezone change in the query, Python doesn't support RFC 3339 format)
 """
 @items.route('/items', methods=['GET'])
 def get_all_items():
@@ -33,8 +34,7 @@ def get_all_items():
     # filter on time_between
     time_query = request.args.get('between')
     if time_query is not None:
-        (start, end) = [datetime.strptime(t.split('+')[0].replace('T', ' '), '%Y-%m-%d %H:%M:%S.%f')
-                        for t in time_query.split(',')]
+        (start, end) = [datetime.strptime(t, '%Y-%m-%d %H:%M:%S.%f') for t in time_query.split(',')]
         items = items.filter(Item.datetime.between(start, end))
 
     return ItemSchema(many=True).jsonify(items)

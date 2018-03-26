@@ -12,12 +12,12 @@ ml = MLFactory()
 ca = Camera()
 fcm = FCM()
 
-SERIAL_PORT = '/dev/ttyAMA0'
+SERIAL_PORT = '/dev/ttyS0'
 SERIAL_BAUDRATE = 9600
 
 ser = None
 try:
-    ser = Serial("/dev/ttyS0", baudrate=9600)
+    ser = Serial(port=SERIAL_PORT, baudrate=SERIAL_BAUDRATE)
     print('Serial port opened successfully!')
 except:
     print('\nSerial port failed to be opened!\n', file=sys.stderr)

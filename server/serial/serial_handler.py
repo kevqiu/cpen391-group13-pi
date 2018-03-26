@@ -81,7 +81,7 @@ def handle_message(msg):
         items = requests.get('http://localhost:5000/items?between={},{}'.format(cycle['start_time'], cycle['end_time'])).json()
         counts = [0, 0, 0, 0]
         for i in items:
-            counts[int(i['category_id']) + 1] += 1
+            counts[int(i['category_id']) - 1] += 1
 
         # values = re.findall('(?<==)\d+', msg)
         payload = {

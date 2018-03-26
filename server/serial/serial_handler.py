@@ -35,7 +35,7 @@ Message types:
 """
 def handle_message(msg):
     if 'init:' in msg:
-        (h, m, s) = re.findall(r'\d{2}:\d{2}:\d{2}', msg).split(':')
+        (h, m, s) = [int(x) for x in re.findall(r'\d{2}:\d{2}:\d{2}', msg)[0].split(':')]
         dt = datetime.now().replace(hour=h, minute=m, second=s)
         dt_string = dt.strftime("%Y-%m-%d %H:%M:%S.%f")
         payload = {
@@ -61,11 +61,11 @@ def handle_message(msg):
             print('Error attempting to parse GPGGA string')
 
     elif 'done:' in msg:
-        (h, m, s) = re.findall(r'\d{2}:\d{2}:\d{2}', msg).split(':')
+        (h, m, s) = [int(x) for x in re.findall(r'\d{2}:\d{2}:\d{2}', msg)[0].split(':')]
         dt = datetime.now().replace(hour=h, minute=m, second=s)
         dt_string = dt.strftime("%Y-%m-%d %H:%M:%S.%f")
 
-        cycle_id = int(re.findall(r'cycle_id=\d+', msg).split('='))
+        cycle_id = int(re.findall(r'cycle_id=\d+', msg)[0].split('='))
 
         payload = {
             'end_time': dt_string

@@ -78,16 +78,16 @@ def handle_message(msg):
         cycle['end_time'] = cycle['end_time'].replace('T', ' ').split('+')[0]
 
         # get all the items scanned during the cycle and notify FCM
-        red_item_count = len(requests.get('http://localhost:5000/items?category_id={}&between={},{}'.format(1, cycle['start_time'], cycle['end_time'])).json())
-        green_item_count = len(requests.get('http://localhost:5000/items?category_id={}&between={},{}'.format(2, cycle['start_time'], cycle['end_time'])).json())
-        blue_item_count = len(requests.get('http://localhost:5000/items?category_id={}&between={},{}'.format(3, cycle['start_time'], cycle['end_time'])).json())
-        other_item_count = len(requests.get('http://localhost:5000/items?category_id={}&between={},{}'.format(4, cycle['start_time'], cycle['end_time'])).json())
+        items = len(requests.get('http://localhost:5000/items?between={},{}'.format(cycle['start_time'], cycle['end_time'])).json())
+        counts = [0, 0, 0, 0]
+        for i in items:
+            counts[int(i['category_id']) + 1] += 1
 
         # values = re.findall('(?<==)\d+', msg)
         payload = {
-            'red': red_item_count,
-            'green': green_item_count,
-            'blue': blue_item_count,
-            'other': other_item_count
+            'red': counts[0],
+            'green': counts[1],
+            'blue': counts[2],
+            'other': counts[3]
         }
         requests.post('http://localhost:5000/notify', json=payload)

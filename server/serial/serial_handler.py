@@ -34,6 +34,7 @@ Message types:
 - done:time=HH:MM:SS,cycle_id=<ID>
 """
 def handle_message(msg):
+    # Auto sort is beginning
     if 'init:' in msg:
         (h, m, s) = [int(x) for x in re.findall(r'\d{2}:\d{2}:\d{2}', msg)[0].split(':')]
         dt = datetime.now().replace(hour=h, minute=m, second=s)
@@ -41,10 +42,10 @@ def handle_message(msg):
         payload = {
             'start_time': dt_string
         }
-        response = requests.post('http://localhost:5000/cycles',
-                      json=payload)
+        response = requests.post('http://localhost:5000/cycles', json=payload)
         serial_write('cycle_id={}'.format(response.json()['id']))
 
+    # Image is ready to be scanned
     elif 'capture:' in msg:
         args = re.findall(r'(?<==)\S*', msg)
         try:
@@ -55,31 +56,36 @@ def handle_message(msg):
                 'latitude': data.latitude if len(args) < 2 else convert_dmm_to_dd(args[1]),
                 'longitude': data.longitude if len(args) < 2 else convert_dmm_to_dd(args[2])
             }
-            requests.post('http://localhost:5000/controls/capture',
-                          json=payload)
+            requests.post('http://localhost:5000/controls/capture', json=payload)
         except:
             print('Error attempting to parse GPGGA string')
 
+    # Auto sort has completed
     elif 'done:' in msg:
+        # update the existing cycle with the end time
         (h, m, s) = [int(x) for x in re.findall(r'\d{2}:\d{2}:\d{2}', msg)[0].split(':')]
         dt = datetime.now().replace(hour=h, minute=m, second=s)
         dt_string = dt.strftime("%Y-%m-%d %H:%M:%S.%f")
-
         cycle_id = int(re.findall(r'cycle_id=\d+', msg)[0].split('=')[1])
-
         payload = {
             'end_time': dt_string
         }
+        requests.patch('http://localhost:5000/cycles/{}'.format(cycle_id), json=payload)
 
-        requests.patch('http://localhost:5000/cycles/{}'.format(cycle_id),
-                       json=payload)
+        # fetch the newly updated cycle
+        cycle = requests.get('http://localhost:5000/cycles/{}'.format(cycle_id)).json()
+
+        # get all the items scanned during the cycle and notify FCM
+        red_item_count = len(requests.get('http://localhost:5000/items?category_id={}&between={},{}'.format(1, cycle['start_time'], cycle['end_time'])).json())
+        green_item_count = len(requests.get('http://localhost:5000/items?category_id={}&between={},{}'.format(2, cycle['start_time'], cycle['end_time'])).json())
+        blue_item_count = len(requests.get('http://localhost:5000/items?category_id={}&between={},{}'.format(3, cycle['start_time'], cycle['end_time'])).json())
+        other_item_count = len(requests.get('http://localhost:5000/items?category_id={}&between={},{}'.format(4, cycle['start_time'], cycle['end_time'])).json())
 
         # values = re.findall('(?<==)\d+', msg)
-        # payload = {
-        #     'red': values[0],
-        #     'green': values[1],
-        #     'blue': values[2],
-        #     'other': values[3]
-        # }
-        # requests.post('http://localhost:5000/notify',
-        #                   json=payload)
+        payload = {
+            'red': red_item_count,
+            'green': green_item_count,
+            'blue': blue_item_count,
+            'other': other_item_count
+        }
+        requests.post('http://localhost:5000/notify', json=payload)

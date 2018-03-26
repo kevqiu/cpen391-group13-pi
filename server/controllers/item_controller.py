@@ -34,7 +34,7 @@ def get_all_items():
     # filter on time_between
     time_query = request.args.get('between')
     if time_query is not None:
-        (start, end) = [datetime.strptime(t, '%Y-%m-%dT%H:%M:%S.%f') for t in time_query.split(',')]
+        (start, end) = [datetime.strptime(t, '%Y-%m-%d %H:%M:%S.%f') for t in time_query.split(',')]
         items = items.filter(Item.datetime.between(start, end))
 
     return ItemSchema(many=True).jsonify(items)

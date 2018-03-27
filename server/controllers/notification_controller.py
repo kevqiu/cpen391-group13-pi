@@ -7,18 +7,21 @@ notifications = Blueprint('notifications', __name__)
 
 """
 POST notify
-Body must contain the values for Red, Green, Blue, and Other
+Body must contain start and end times of the cycle
 """
 @notifications.route('/notify', methods=['POST'])
 def notify():
-    red = request.json.get('red')
-    green = request.json.get('green')
-    blue = request.json.get('blue')
-    other = request.json.get('other')
+    topic = request.json.get('topic')
+    start_time = request.json.get('start_time')
+    end_time = request.json.get('end_time')
 
-    notification_msg = 'Sorting complete! Results - Red: {0}, Green: {1}, Blue: {2}, Other: {3}' \
-        .format(red, green, blue, other)
+    notification_msg = 'Sorting complete! Tap to see results.'
 
-    fcm.send_notification("sort", notification_msg)
+    data = {
+        'start_time': start_time,
+        'end_time': end_time,
+    }
+
+    fcm.send_notification(topic, notification_msg, data, 'MainMenu')
 
     return 'Notification sent'

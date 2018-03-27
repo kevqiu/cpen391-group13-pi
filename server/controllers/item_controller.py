@@ -1,3 +1,4 @@
+import urllib.parse
 from datetime import datetime
 import os
 
@@ -34,7 +35,9 @@ def get_all_items():
     # filter on time_between
     time_query = request.args.get('between')
     if time_query is not None:
-        (start, end) = [datetime.strptime(t.replace('T', ' '), '%Y-%m-%d %H:%M:%S.%f') for t in time_query.split(',')]
+        time_query_decoded = urllib.parse.unquote(time_query)
+        print(time_query_decoded)
+        (start, end) = [datetime.strptime(t.replace('T', ' '), '%Y-%m-%d %H:%M:%S.%f') for t in time_query_decoded.split(',')]
         items = items.filter(Item.datetime.between(start, end))
 
     return ItemSchema(many=True).jsonify(items)

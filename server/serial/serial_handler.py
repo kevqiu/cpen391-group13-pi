@@ -72,22 +72,14 @@ def handle_message(msg):
         }
         requests.patch('http://localhost:5000/cycles/{}'.format(cycle_id), json=payload)
 
-        # fetch the newly updated cycle and manipulate data for queries
+        # fetch the newly updated cycle and notify FCM
         cycle = requests.get('http://localhost:5000/cycles/{}'.format(cycle_id)).json()
         cycle['start_time'] = cycle['start_time'].replace('T', ' ').split('+')[0]
         cycle['end_time'] = cycle['end_time'].replace('T', ' ').split('+')[0]
 
-        # get all the items scanned during the cycle and notify FCM
-        items = requests.get('http://localhost:5000/items?between={},{}'.format(cycle['start_time'], cycle['end_time'])).json()
-        counts = [0, 0, 0, 0]
-        for i in items:
-            counts[int(i['category_id']) - 1] += 1
-
-        # values = re.findall('(?<==)\d+', msg)
         payload = {
-            'red': counts[0],
-            'green': counts[1],
-            'blue': counts[2],
-            'other': counts[3]
+            'topic': 'sort',
+            'start_time': cycle['start_time'],
+            'end_time': cycle['end_time']
         }
         requests.post('http://localhost:5000/notify', json=payload)

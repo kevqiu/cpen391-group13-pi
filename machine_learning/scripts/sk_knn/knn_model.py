@@ -54,7 +54,7 @@ class KNNModel:
         clusters = self._cluster_model.fit(sample).cluster_centers_
         cluster_colours = self._neighbour_model.predict(clusters)
         print(cluster_colours)
-        return cluster_colours
+        return cluster_colours[0], 1
 
 
 class MockConfig:
@@ -62,7 +62,7 @@ class MockConfig:
     ML_KNN_N_NEIGHBOURS = 4
     ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP = 10
     ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 100
-    ML_KNN_COLOUR_DATASET = 'rgb_label_dataset.pickle'
+    ML_KNN_COLOUR_DATASET = '../../data_files/rgb_label_dataset.pickle'
 
 def main(args):
     model = KNNModel(MockConfig())

@@ -24,7 +24,10 @@ class KNNModel:
             config.ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 1
 
         if config.ML_KNN_RGB_ONLY is None:
-            config.ML_KNN_RGB_ONLY = 1
+            config.ML_KNN_RGB_ONLY = False
+
+        if config.ML_VERBOSE is None:
+            config.ML_VERBOSE = False
 
         # Grab dataset for KNN
         dataset = None
@@ -42,6 +45,8 @@ class KNNModel:
         self._image_skip_step = config.ML_KNN_IMAGE_SAMPLE_SKIP_STEP
         self._rgb_only = config.ML_KNN_RGB_ONLY
 
+        self._verbose = config.ML_VERBOSE
+
         if (self._rgb_only):
             self._colour_mapper = {
                 'pink': 'red',
@@ -50,7 +55,7 @@ class KNNModel:
                 'sky': 'blue',
                 'gold': 'red',
                 'purple': 'blue',
-                'olive': 'black',
+                'olive': 'green',
                 'mustard': 'red',
                 'lime': 'green',
                 'green': 'green',
@@ -59,11 +64,11 @@ class KNNModel:
                 'navy': 'blue',
                 'dark': 'black',
                 'yellow': 'red',
-                'teal': 'blue',
+                'teal': 'green',
                 'light': 'black',
                 'magenta': 'red',
                 'black': 'black',
-                'cyan': 'blue',
+                'cyan': 'black',
                 'blue': 'blue'
             }
 
@@ -78,11 +83,24 @@ class KNNModel:
         # Flatten
         num_pixels = img_matrix.shape[0] * img_matrix.shape[1]
         dataset = img_matrix.reshape((num_pixels, 3))
+
         # Sample every nth pixel
         sample = dataset[1::self._image_skip_step]
+
+        # Obtain the kmeans of the sample and the cluster of each
+        # element in the sample
         clusters = self._cluster_model.fit(sample).cluster_centers_
+        cluster_size = self._cluster_model.labels_
+
+        # Determine the RGB colour of each cluster
         cluster_colours = self._neighbour_model.predict(clusters)
-        print(cluster_colours)
+
+        # The number of pixels in each category
+        if (self._verbose):
+            unique, counts = np.unique(cluster_size, return_counts=True)
+            unique = [cluster_colours[x] for x in unique]
+            print(dict(zip(unique, counts)))
+
         cluster_colours = cluster_colours.tolist()
 
         # map and mode
@@ -91,9 +109,19 @@ class KNNModel:
             cluster_colours = [self._colour_mapper[x]  
                             for x in cluster_colours 
                             if (self._colour_mapper[x] != 'black')]
+            if (self._verbose):
+                print('Mapping to RGB:')
+                print(cluster_colours)
+
+        if len(cluster_colours) == 0: 
+            colour_mode = 'black'
+            confidence = 0
+            return colour_mode, confidence
 
         colour_mode = max(set(cluster_colours), key=cluster_colours.count)
         confidence = cluster_colours.count(colour_mode) / len(cluster_colours)
+        if (self._verbose):
+            print('Mode: {0} | Confidence: {1}'.format(colour_mode, confidence))
         return colour_mode, confidence
 
 
@@ -102,7 +130,8 @@ class MockConfig:
     ML_KNN_N_NEIGHBOURS = 4
     ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP = 10
     ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 100
-    ML_KNN_RGB_ONLY = 1
+    ML_KNN_RGB_ONLY = True
+    ML_VERBOSE = True
     ML_KNN_COLOUR_DATASET = '../../data_files/rgb_label_dataset.pickle'
 
 def main(args):

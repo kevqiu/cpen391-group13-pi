@@ -36,6 +36,7 @@ class Config(object):
     ML_KNN_N_NEIGHBOURS = 4
     ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP = 10
     ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 100
+    ML_KNN_RGB_ONLY = 1
     
 
 

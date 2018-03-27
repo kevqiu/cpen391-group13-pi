@@ -11,17 +11,20 @@ class KNNModel:
     def __init__(self, config):
         self.validate_config(config)
 
-        if not config.ML_KNN_N_CLUSTERS:
+        if config.ML_KNN_N_CLUSTERS is None:
             config.ML_KNN_N_CLUSTERS = 2
         
-        if not config.ML_KNN_N_NEIGHBOURS:
+        if config.ML_KNN_N_NEIGHBOURS is None:
             config.ML_KNN_N_NEIGHBOURS = 4
         
-        if not config.ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP:
+        if config.ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP is None:
             config.ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP = 1
 
-        if not config.ML_KNN_IMAGE_SAMPLE_SKIP_STEP:
+        if config.ML_KNN_IMAGE_SAMPLE_SKIP_STEP is None:
             config.ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 1
+
+        if config.ML_KNN_RGB_ONLY is None:
+            config.ML_KNN_RGB_ONLY = 1
 
         # Grab dataset for KNN
         dataset = None
@@ -36,7 +39,33 @@ class KNNModel:
         self._cluster_model = KMeans(n_clusters=config.ML_KNN_N_CLUSTERS, random_state=0)
         self._neighbour_model = KNeighborsClassifier(n_neighbors=config.ML_KNN_N_NEIGHBOURS,
                                                      algorithm='kd_tree').fit(X_sample, y_sample)
-        self.image_skip_step = config.ML_KNN_IMAGE_SAMPLE_SKIP_STEP
+        self._image_skip_step = config.ML_KNN_IMAGE_SAMPLE_SKIP_STEP
+        self._rgb_only = config.ML_KNN_RGB_ONLY
+
+        if (self._rgb_only):
+            self._colour_mapper = {
+                'pink': 'red',
+                'red': 'red',
+                'brown': 'black',
+                'sky': 'blue',
+                'gold': 'red',
+                'purple': 'blue',
+                'olive': 'black',
+                'mustard': 'red',
+                'lime': 'green',
+                'green': 'green',
+                'orange': 'red',
+                'maroon': 'red',
+                'navy': 'blue',
+                'dark': 'black',
+                'yellow': 'red',
+                'teal': 'blue',
+                'light': 'black',
+                'magenta': 'red',
+                'black': 'black',
+                'cyan': 'blue',
+                'blue': 'blue'
+            }
 
     
     def validate_config(self, config):
@@ -50,18 +79,30 @@ class KNNModel:
         num_pixels = img_matrix.shape[0] * img_matrix.shape[1]
         dataset = img_matrix.reshape((num_pixels, 3))
         # Sample every nth pixel
-        sample = dataset[1::self.image_skip_step]
+        sample = dataset[1::self._image_skip_step]
         clusters = self._cluster_model.fit(sample).cluster_centers_
         cluster_colours = self._neighbour_model.predict(clusters)
         print(cluster_colours)
-        return cluster_colours[0], 1
+        cluster_colours = cluster_colours.tolist()
+
+        # map and mode
+        confidence = 1
+        if (self._rgb_only):
+            cluster_colours = [self._colour_mapper[x]  
+                            for x in cluster_colours 
+                            if (self._colour_mapper[x] != 'black')]
+
+        colour_mode = max(set(cluster_colours), key=cluster_colours.count)
+        confidence = cluster_colours.count(colour_mode) / len(cluster_colours)
+        return colour_mode, confidence
 
 
 class MockConfig:
-    ML_KNN_N_CLUSTERS = 2
+    ML_KNN_N_CLUSTERS = 3
     ML_KNN_N_NEIGHBOURS = 4
     ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP = 10
     ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 100
+    ML_KNN_RGB_ONLY = 1
     ML_KNN_COLOUR_DATASET = '../../data_files/rgb_label_dataset.pickle'
 
 def main(args):

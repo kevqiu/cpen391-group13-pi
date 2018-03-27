@@ -35,6 +35,8 @@ class DevConfig(Config):
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(Config.DB_PATH)
 
+    FCM_API_KEY = "sUp3r_s3cReT_aP1_k3Y"
+
 
 class ProdConfig(Config):
     """Prod config. To be used on the Raspberry Pi"""

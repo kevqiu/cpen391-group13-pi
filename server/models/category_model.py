@@ -1,4 +1,4 @@
-from server.extensions import ma, db
+from server.modules import ma, db
 
 
 class Category(db.Model):

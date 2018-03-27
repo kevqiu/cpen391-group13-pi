@@ -45,4 +45,4 @@ def get_item_image(id):
     if os.path.isfile(img_path):
         return send_file(img_path, mimetype='image/jpeg')
     else:
-        return make_response(jsonify({'error': 'Image not found on server'}), 404)
+        return send_file(os.path.join(DevConfig.IMG_PATH, 'no_image.jpeg'), mimetype='image/jpeg')

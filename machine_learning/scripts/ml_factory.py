@@ -29,4 +29,3 @@ class MLFactory():
         if not self.model:
             raise EnvironmentError('Please initialize the model before predicting')
         return self.model.predict(image)
-

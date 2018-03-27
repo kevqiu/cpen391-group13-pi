@@ -40,7 +40,7 @@ class ClusterModel:
         clt_centers = np.array(clt.cluster_centers_)
 
 
-        #print(self.check_clt(clt_centers))
+        print(self.check_clt(clt_centers))
         category = self.check_clt(clt_centers)
         confidence = 1
         return (category, confidence)

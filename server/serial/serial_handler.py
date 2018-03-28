@@ -43,7 +43,7 @@ def handle_message(msg):
             'start_time': dt_string
         }
         response = requests.post('http://localhost:5000/cycles', json=payload)
-        serial_write('cycle_id={}'.format(response.json()['id']))
+        serial_write('cycle_id={}\r'.format(response.json()['id']))
 
     # Image is ready to be scanned
     elif 'capture:' in msg:

@@ -43,10 +43,10 @@ data = [
     Category(category='blue'),
     Category(category='other'),
 
-    Cycle(start_time=datetime.now() - timedelta(days=1), end_time=datetime.now()),
+#    Cycle(start_time=datetime.now() - timedelta(days=1), end_time=datetime.now()),
 
-    Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=3)),
-    Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=2)),
-    Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=1)),
-    Item(warehouse_id=1, category_id=1, datetime=datetime.now()),
+ #   Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=3)),
+ #   Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=2)),
+ #   Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=1)),
+ #   Item(warehouse_id=1, category_id=1, datetime=datetime.now()),
 ]

@@ -1,6 +1,8 @@
+from datetime import datetime
 import requests
 import re
 
+from server.controllers.controls_controller import serial_write
 from server.modules import ser
 from server.helpers.gps_helper import parse_gpgga_data, convert_dmm_to_dd
 
@@ -25,32 +27,59 @@ def serial_listener():
 """ 
 Handeles serial messages
 Message types:
+- init:time=HH:MM:SS
+    - calls server to initialize autosort cycle
 - capture: gps=$GPGGA<gpgga data>
     - calls server to take image of object and save to database
-- done:r=<r_count>,g=<g_count>,g=<g_count>,o=<o_count>
+- done:time=HH:MM:SS,cycle_id=<ID>
 """
 def handle_message(msg):
-    if 'capture:' in msg:
+    # Auto sort is beginning
+    if 'init:' in msg:
+        (h, m, s) = [int(x) for x in re.findall(r'\d{2}:\d{2}:\d{2}', msg)[0].split(':')]
+        dt = datetime.now().replace(hour=h, minute=m, second=s)
+        dt_string = dt.strftime("%Y-%m-%d %H:%M:%S.%f")
+        payload = {
+            'start_time': dt_string
+        }
+        response = requests.post('http://localhost:5000/cycles', json=payload)
+        serial_write('cycle_id={}\r'.format(response.json()['id']))
+
+    # Image is ready to be scanned
+    elif 'capture:' in msg:
         args = re.findall(r'(?<==)\S*', msg)
         try:
             data = parse_gpgga_data(args[0])
+            dt = data.datetime.strftime("%Y-%m-%d %H:%M:%S.%f")
             payload = {
-                'datetime': data.datetime.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                'datetime': dt,
                 'latitude': data.latitude if len(args) < 2 else convert_dmm_to_dd(args[1]),
                 'longitude': data.longitude if len(args) < 2 else convert_dmm_to_dd(args[2])
             }
-            requests.post('http://localhost:5000/controls/capture',
-                          json=payload)
+            requests.post('http://localhost:5000/controls/capture', json=payload)
         except:
             print('Error attempting to parse GPGGA string')
 
+    # Auto sort has completed
     elif 'done:' in msg:
-        values = re.findall('(?<==)\d+', msg)
+        # update the existing cycle with the end time
+        (h, m, s) = [int(x) for x in re.findall(r'\d{2}:\d{2}:\d{2}', msg)[0].split(':')]
+        dt = datetime.now().replace(hour=h, minute=m, second=s)
+        dt_string = dt.strftime("%Y-%m-%d %H:%M:%S.%f")
+        cycle_id = int(re.findall(r'cycle_id=\d+', msg)[0].split('=')[1])
         payload = {
-            'red': values[0],
-            'green': values[1],
-            'blue': values[2],
-            'other': values[3]
+            'end_time': dt_string
         }
-        requests.post('http://localhost:5000/notify',
-                          json=payload)
+        requests.patch('http://localhost:5000/cycles/{}'.format(cycle_id), json=payload)
+
+        # fetch the newly updated cycle and notify FCM
+        cycle = requests.get('http://localhost:5000/cycles/{}'.format(cycle_id)).json()
+        cycle['start_time'] = cycle['start_time'].replace('T', ' ').split('+')[0]
+        cycle['end_time'] = cycle['end_time'].replace('T', ' ').split('+')[0]
+
+        payload = {
+            'topic': 'sort',
+            'start_time': cycle['start_time'],
+            'end_time': cycle['end_time']
+        }
+        requests.post('http://localhost:5000/notify', json=payload)

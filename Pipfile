@@ -21,9 +21,6 @@ tensorflow = "==1.1.0"
 scikit-learn = "*"
 scipy = "*"
 #"c0a73bc" = {path = "./tensorflow-1.1.0-cp34-cp34m-linux_armv7l.whl"}
-
 [dev-packages]
 #scikit-image = "*"
 #imgaug = "*"
-
-

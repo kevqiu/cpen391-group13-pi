@@ -1,5 +1,8 @@
 from machine_learning.scripts.tf_cnn.cnn_model import CNNModel
+<<<<<<< HEAD
 from machine_learning.scripts.sklearn_clustering.kmean_clst_model import ClusterModel
+from machine_learning.scripts.sk_knn.knn_model import KNNModel
+
 class MLFactory():
 
     def __init__(self):
@@ -24,6 +27,12 @@ class MLFactory():
         else:
             raise ValueError('No matching model found, currently'
                              'supports: cnn and clustering')
+        elif model_str == 'knn':
+            self.model = KNNModel(config)
+        else:
+            raise ValueError('No matching model found, currently'
+                             'supports: cnn, knn')
+
 
     def predict(self, image):
         if not self.model:

@@ -11,5 +11,8 @@ class FCM:
         self.push_service = FCMNotification(api_key=api_key)
 
 
-    def send_notification(self, topic, message):
-        self.push_service.notify_topic_subscribers(topic_name=topic, message_body=message)
+    def send_notification(self, topic, message, data, click_action):
+        self.push_service.notify_topic_subscribers(topic_name=topic,
+                                                   message_body=message,
+                                                   data_message=data,
+                                                   click_action=click_action)

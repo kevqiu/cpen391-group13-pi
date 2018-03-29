@@ -16,18 +16,29 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     #  Machine learning configs
-    ML_MODEL_TO_USE = 'cnn'
-
+    ML_MODEL_TO_USE = 'knn'
     ML_DIR = 'machine_learning'
+    MODEL_DIR =  'data_files'
+    ML_VERBOSE = True
 
     # CNN configs
-    MODEL_DIR =  'data_files'
     ML_CNN_MODEL_FILE = path.abspath(
         path.join(PROJECT_DIR, ML_DIR, MODEL_DIR, 'colour_detect.pb')
     )
     ML_CNN_LABEL_FILE = path.abspath(
         path.join(PROJECT_DIR, ML_DIR, MODEL_DIR, 'colour_detect.txt')
     )
+
+    # KNN configs
+    ML_KNN_COLOUR_DATASET = path.abspath(
+        path.join(PROJECT_DIR, ML_DIR, MODEL_DIR, 'rgb_label_dataset.pickle')
+    )
+    ML_KNN_N_CLUSTERS = 4
+    ML_KNN_N_NEIGHBOURS = 4
+    ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP = 10
+    ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 50
+    ML_KNN_RGB_ONLY = True
+    
 
 
 class DevConfig(Config):

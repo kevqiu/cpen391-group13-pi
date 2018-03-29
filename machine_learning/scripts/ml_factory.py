@@ -1,5 +1,4 @@
 from machine_learning.scripts.tf_cnn.cnn_model import CNNModel
-<<<<<<< HEAD
 from machine_learning.scripts.sklearn_clustering.kmean_clst_model import ClusterModel
 from machine_learning.scripts.sk_knn.knn_model import KNNModel
 

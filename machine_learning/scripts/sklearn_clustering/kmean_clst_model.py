@@ -16,17 +16,13 @@ class ClusterModel:
         Args:
           image_path: the path to the image file (jpg)
         """
-    # Load the image
+        # Load the image
         image = self.load_image(image_path)
 
-    # Reshape the image to be a list of pixels
+        # Reshape the image to be a list of pixels
         image_array = image.reshape((image.shape[0] * image.shape[1], 3))
         #print(image_array)
    
-    # Clusters the pixels
-        # clt = KMeans(n_clusters = 3)
-        # clt.fit(image_array)
-
         clt = KMeans(n_clusters=2)
         clt.fit(image_array)
 
@@ -60,19 +56,23 @@ class ClusterModel:
         return data
 
     def centroid_histogram(self, clt):
-    # grab the number of different clusters and create a histogram
-    # based on the number of pixels assigned to each cluster
+       # grab the number of different clusters and create a histogram
+       # based on the number of pixels assigned to each cluster
         numLabels = np.arange(0, len(np.unique(clt.labels_)) + 1)
         (hist, _) = np.histogram(clt.labels_, bins = numLabels)
 
-    # normalize the histogram, such that it sums to one
+        # normalize the histogram, such that it sums to one
         hist = hist.astype("float")
         hist /= hist.sum()
 
-    # return the histogram
+        # return the histogram
         return hist
 
     def check_clt(self,centers):
+	"""
+	checks if passed cluster is background colour or main object
+	makes call to identify the object colour
+	"""
         if all(i >= 50 and i<155  for i in centers[0]):
             return self.colour_id(centers[1])
         else:

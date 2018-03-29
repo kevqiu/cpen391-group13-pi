@@ -21,20 +21,16 @@ class ClusterModel:
 
         # Reshape the image to be a list of pixels
         image_array = image.reshape((image.shape[0] * image.shape[1], 3))
-        #print(image_array)
-   
+         
         clt = KMeans(n_clusters=2)
         clt.fit(image_array)
 
         hist = self.centroid_histogram(clt)
-        zipped = list(zip(hist, clt.cluster_centers_))
-        
+	
+        zipped = list(zip(hist, clt.cluster_centers_))        
         sorted(zipped, key=lambda x: x[0])
-        #zipped.sort(reverse=True, key=lambda x: x[0])
-
         hist, clt.cluster_centers = zip(*zipped)
         clt_centers = np.array(clt.cluster_centers_)
-
 
         print(self.check_clt(clt_centers))
         category = self.check_clt(clt_centers)

@@ -65,10 +65,10 @@ class ClusterModel:
         return hist
 
     def check_clt(self,centers):
-	"""
-	checks if passed cluster is background colour or main object
-	makes call to identify the object colour
-	"""
+        """
+        checks if passed cluster is background colour or main object
+        makes call to identify the object colour
+        """
         if all(i >= 50 and i<155  for i in centers[0]):
             return self.colour_id(centers[1])
         else:

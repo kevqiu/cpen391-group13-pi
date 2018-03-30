@@ -30,7 +30,7 @@ def capture_image():
     # Rudimentary retry state
     # TODO: Where to store threshold variables
     max_attempts = 3
-    confidence_threshold = 0.50
+    confidence_threshold = 0
     num_attempts = 0
 
     while num_attempts < max_attempts:

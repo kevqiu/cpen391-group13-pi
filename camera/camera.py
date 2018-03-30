@@ -22,8 +22,10 @@ class Camera:
         if platform.uname()[4].startswith('arm'):
             # Running on the pi
             camera = picamera.PiCamera()
+            time.sleep(0.1)
             camera.capture(name)
             camera.close()
+            time.sleep(0.1)
         else:
             camera = cv2.VideoCapture(0)
             time.sleep(0.1)

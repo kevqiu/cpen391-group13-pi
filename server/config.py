@@ -16,7 +16,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     #  Machine learning configs
-    ML_MODEL_TO_USE = 'knn'
+    ML_MODEL_TO_USE = 'clst'
     ML_DIR = 'machine_learning'
     MODEL_DIR =  'data_files'
     ML_VERBOSE = True

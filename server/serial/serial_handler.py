@@ -56,7 +56,7 @@ def handle_message(msg):
                 'latitude': data.latitude if len(args) < 2 else convert_dmm_to_dd(args[1]),
                 'longitude': data.longitude if len(args) < 2 else convert_dmm_to_dd(args[2])
             }
-            requests.post('http://localhost:5000/controls/capture', json=payload)
+            requests.post('http://localhost:5000/controls/capture/pi', json=payload)
         except:
             print('Error attempting to parse GPGGA string')
 

@@ -58,6 +58,8 @@ def handle_message(msg):
             }
             requests.post('http://localhost:5000/capture/pi', json=payload)
         except:
+            # send retry command to DE1
+            serial_write('retry\r')
             print('Error attempting to parse GPGGA string')
 
     # Auto sort has completed

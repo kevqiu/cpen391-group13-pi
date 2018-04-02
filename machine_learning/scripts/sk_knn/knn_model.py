@@ -54,7 +54,7 @@ class KNNModel:
                 'brown': 'black',
                 'sky': 'blue',
                 'gold': 'red',
-                'purple': 'blue',
+                'purple': 'black',
                 'olive': 'green',
                 'mustard': 'red',
                 'lime': 'green',
@@ -64,7 +64,7 @@ class KNNModel:
                 'navy': 'blue',
                 'dark': 'black',
                 'yellow': 'red',
-                'teal': 'green',
+                'teal': 'blue',
                 'light': 'black',
                 'magenta': 'red',
                 'black': 'black',
@@ -86,6 +86,10 @@ class KNNModel:
 
         # Sample every nth pixel
         sample = dataset[1::self._image_skip_step]
+        num_samples = num_pixels/self._image_skip_step
+        sample_threshold = num_samples * 0.025
+        if (self._verbose):
+            print('Sample size: {}, sample threshold: {}'.format(num_samples, sample_threshold))
 
         # Obtain the kmeans of the sample and the cluster of each
         # element in the sample
@@ -96,12 +100,17 @@ class KNNModel:
         cluster_colours = self._neighbour_model.predict(clusters)
 
         # The number of pixels in each category
+        unique, counts = np.unique(cluster_size, return_counts=True)
+        unique = [cluster_colours[x] for x in unique]
         if (self._verbose):
-            unique, counts = np.unique(cluster_size, return_counts=True)
-            unique = [cluster_colours[x] for x in unique]
             print(dict(zip(unique, counts)))
 
+        # Threshold values
+        thresholded_count_ind = np.where(counts > sample_threshold)
+        cluster_colours = cluster_colours[thresholded_count_ind]
         cluster_colours = cluster_colours.tolist()
+        if (self._verbose):
+            print(cluster_colours)
 
         # map and mode
         confidence = 1
@@ -126,10 +135,10 @@ class KNNModel:
 
 
 class MockConfig:
-    ML_KNN_N_CLUSTERS = 3
+    ML_KNN_N_CLUSTERS = 4
     ML_KNN_N_NEIGHBOURS = 4
-    ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP = 10
-    ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 100
+    ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP = 100
+    ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 200
     ML_KNN_RGB_ONLY = True
     ML_VERBOSE = True
     ML_KNN_COLOUR_DATASET = '../../data_files/rgb_label_dataset.pickle'

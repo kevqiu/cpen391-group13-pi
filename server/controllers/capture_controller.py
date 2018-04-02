@@ -84,7 +84,7 @@ def capture_image_mobile():
     dt = request.form.get('datetime')
     lat = request.form.get('latitude')
     long = request.form.get('longitude')
-    file = request.files['file']
+    file = request.files.get('file')
 
     if not all((dt, lat, long)):
         abort(400, {'message': 'Missing data for item'})

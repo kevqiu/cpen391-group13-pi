@@ -10,6 +10,7 @@ from server.controllers.error_controller import error
 from server.controllers.controls_controller import controls
 from server.controllers.warehouse_controller import warehouses
 from server.controllers.item_controller import items
+from server.controllers.video_controller import video
 from server.serial.serial_handler import serial_listener
 
 """ Main app """
@@ -33,6 +34,7 @@ def create_app(config_object=DevConfig):
     app.register_blueprint(items)
     app.register_blueprint(controls)
     app.register_blueprint(notifications)
+    app.register_blueprint(video)
     app.register_blueprint(error)
 
     # Begin Serial thread
@@ -44,4 +46,4 @@ def create_app(config_object=DevConfig):
 
 if __name__ == '__main__':
     app = create_app()
-    app.run()
+    app.run(threaded=True)

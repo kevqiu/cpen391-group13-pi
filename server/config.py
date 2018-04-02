@@ -11,6 +11,7 @@ class Config(object):
     DB_PATH = path.abspath(path.join(PROJECT_DIR, DB_DIR, DB_FILE))
     IMG_DIR = 'images'
     IMG_PATH = path.abspath(path.join(PROJECT_DIR, IMG_DIR))
+    UPLOAD_FOLDER = IMG_PATH
 
     # extension configs
     SQLALCHEMY_TRACK_MODIFICATIONS = False

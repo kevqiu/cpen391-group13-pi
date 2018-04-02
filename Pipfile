@@ -1,9 +1,7 @@
 [[source]]
-
 verify_ssl = true
 name = "pypi"
 url = "https://pypi.python.org/simple"
-
 
 [packages]
 flask = "*"
@@ -19,10 +17,10 @@ pyserial = "*"
 requests = "*"
 pyfcm = "*"
 numpy = "==1.11.*"
-#tensorflow = "==1.1.0"
-"c0a73bc" = {path = "./tensorflow-1.1.0-cp34-cp34m-linux_armv7l.whl"}
-
+tensorflow = "==1.1.0"
+scikit-learn = "*"
+scipy = "*"
+#"c0a73bc" = {path = "./tensorflow-1.1.0-cp34-cp34m-linux_armv7l.whl"}
 [dev-packages]
 #scikit-image = "*"
 #imgaug = "*"
-

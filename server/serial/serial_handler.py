@@ -2,16 +2,17 @@ from datetime import datetime
 import requests
 import re
 
-from server.controllers.controls_controller import serial_write
 from server.modules import ser
 from server.helpers.gps_helper import parse_gpgga_data, convert_dmm_to_dd
 
-""" 
-Serial thread to be spun up on server init
-Contains a buffer that stores incoming serial data.
-Calls handle_message when a \r is received  
-"""
+
 def serial_listener():
+    """
+    Serial thread to be spun up on server init
+    Contains a buffer that stores incoming serial data.
+    Calls handle_message when a \r is received
+    """
+
     msg = ''
     if ser is not None:
         while True:
@@ -24,16 +25,17 @@ def serial_listener():
                     msg = ''
 
 
-""" 
-Handeles serial messages
-Message types:
-- init:time=HH:MM:SS
-    - calls server to initialize autosort cycle
-- capture: gps=$GPGGA<gpgga data>
-    - calls server to take image of object and save to database
-- done:time=HH:MM:SS,cycle_id=<ID>
-"""
 def handle_message(msg):
+    """
+    Handeles serial messages
+    Message types:
+    - init:time=HH:MM:SS
+        - calls server to initialize autosort cycle
+    - capture: gps=$GPGGA<gpgga data>
+        - calls server to take image of object and save to database
+    - done:time=HH:MM:SS,cycle_id=<ID>
+    """
+
     # Auto sort is beginning
     if 'init:' in msg:
         (h, m, s) = [int(x) for x in re.findall(r'\d{2}:\d{2}:\d{2}', msg)[0].split(':')]
@@ -58,6 +60,8 @@ def handle_message(msg):
             }
             requests.post('http://localhost:5000/capture/pi', json=payload)
         except:
+            # send retry command to DE1
+            serial_write('retry\r')
             print('Error attempting to parse GPGGA string')
 
     # Auto sort has completed
@@ -83,3 +87,7 @@ def handle_message(msg):
             'end_time': cycle['end_time']
         }
         requests.post('http://localhost:5000/notify', json=payload)
+
+def serial_write(msg):
+    if ser is not None:
+        ser.write(msg.encode('utf-8'))

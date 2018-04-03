@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-from server.modules import ser
+from server.serial.serial_handler import serial_write
 
 controls = Blueprint('controls', __name__)
 
@@ -31,7 +31,3 @@ def override_position(pos):
     serial_write('ctrl/pos={0}\r'.format(pos))
     return 'Set to position ' + str(pos)
 
-
-def serial_write(msg):
-    if ser is not None:
-        ser.write(msg.encode('utf-8'))

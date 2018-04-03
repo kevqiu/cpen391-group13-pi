@@ -1,13 +1,14 @@
+import os
 from datetime import datetime
 
-import os
-from flask import Blueprint, abort, request, json, send_file
+from flask import Blueprint, abort, request, json
 
 from server.config import DevConfig
-from server.modules import db, ser, ca, ml
 from server.helpers.gps_helper import find_closest_warehouse
 from server.models.item_model import Item
 from server.models.warehouse_model import Warehouse
+from server.modules import db, ca, ml
+from server.serial.serial_handler import serial_write
 
 capture = Blueprint('capture', __name__)
 

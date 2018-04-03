@@ -11,6 +11,7 @@ class Config(object):
     DB_PATH = path.abspath(path.join(PROJECT_DIR, DB_DIR, DB_FILE))
     IMG_DIR = 'images'
     IMG_PATH = path.abspath(path.join(PROJECT_DIR, IMG_DIR))
+    UPLOAD_FOLDER = IMG_PATH
 
     # extension configs
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -33,10 +34,10 @@ class Config(object):
     ML_KNN_COLOUR_DATASET = path.abspath(
         path.join(PROJECT_DIR, ML_DIR, MODEL_DIR, 'rgb_label_dataset.pickle')
     )
-    ML_KNN_N_CLUSTERS = 4
-    ML_KNN_N_NEIGHBOURS = 4
-    ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP = 10
-    ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 50
+    ML_KNN_N_CLUSTERS = 10
+    ML_KNN_N_NEIGHBOURS = 100
+    ML_KNN_NEIGHBOUR_SAMPLE_SKIP_STEP = 100
+    ML_KNN_IMAGE_SAMPLE_SKIP_STEP = 100
     ML_KNN_RGB_ONLY = True
     
 

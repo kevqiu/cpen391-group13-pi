@@ -9,4 +9,4 @@ if __name__ == '__main__':
         elif sys.argv[1] == '-nuke':
             nuke_server()
     else:
-        server.create_app().run(host='0.0.0.0')
+        server.create_app().run(host='0.0.0.0', threaded=True)

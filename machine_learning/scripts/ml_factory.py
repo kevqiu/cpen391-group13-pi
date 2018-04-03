@@ -19,18 +19,13 @@ class MLFactory():
         model_str = config.ML_MODEL_TO_USE
         if model_str == 'cnn':
             self.model = CNNModel(config)
-
         elif model_str == 'clst':
             self.model = ClusterModel(config)
-
-        else:
-            raise ValueError('No matching model found, currently'
-                             'supports: cnn and clustering')
         elif model_str == 'knn':
             self.model = KNNModel(config)
         else:
             raise ValueError('No matching model found, currently'
-                             'supports: cnn, knn')
+                             'supports: cnn, knn, clustering')
 
 
     def predict(self, image):

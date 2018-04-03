@@ -66,7 +66,7 @@ def nuke_server(config_object=DevConfig):
     print('Database successfully initialized!')
     print('Wiping files from /images')
 
-    # wips all images in the images folder
+    # wipes all images in the images folder
     folder = config_object.IMG_PATH
     for f in os.listdir(folder):
         if f not in files_to_not_delete:

@@ -2,6 +2,10 @@ from pyfcm import FCMNotification
 
 
 class FCM:
+    """
+    Firebase Cloud Messaging Client Module.
+    Leverages pyfcm library for API requests
+    """
 
     def __init__(self):
         self.push_service = None

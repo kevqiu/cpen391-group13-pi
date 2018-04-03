@@ -10,13 +10,17 @@ from server.models.category_model import Category
 from server.models.item_model import Item
 from server.models.warehouse_model import Warehouse
 
-""" Database table creation. Invoked by adding -db flag to script execution """
 def init_db(config_object=DevConfig):
+    """
+    Database table creation.
+    Invoked by adding -db flag to script execution
+    """
     app = Flask(__name__)
     app.config.from_object(config_object)
 
     print('Initializing database tables')
 
+    # setups up database tables
     with app.app_context():
         db.init_app(app)
 
@@ -35,11 +39,16 @@ def init_db(config_object=DevConfig):
 
 
 def nuke_server(config_object=DevConfig):
+    """
+    Database wipe, creation, and image deletion
+    Invoked by adding -nuke flag to script execution
+    """
     app = Flask(__name__)
     app.config.from_object(config_object)
 
     print('Initializing database tables')
 
+    # setups up database tables
     with app.app_context():
         db.init_app(app)
 
@@ -57,6 +66,7 @@ def nuke_server(config_object=DevConfig):
     print('Database successfully initialized!')
     print('Wiping files from /images')
 
+    # wipes all images in the images folder
     folder = config_object.IMG_PATH
     for f in os.listdir(folder):
         if f not in files_to_not_delete:
@@ -81,12 +91,12 @@ data = [
     Category(category='blue'),
     Category(category='other'),
 
-#    Cycle(start_time=datetime.now() - timedelta(days=1), end_time=datetime.now()),
-
- #   Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=3)),
- #   Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=2)),
- #   Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=1)),
- #   Item(warehouse_id=1, category_id=1, datetime=datetime.now()),
+   # Cycle(start_time=datetime.now() - timedelta(days=1), end_time=datetime.now()),
+   #
+   # Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=3)),
+   # Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=2)),
+   # Item(warehouse_id=1, category_id=1, datetime=datetime.now() - timedelta(days=1)),
+   # Item(warehouse_id=1, category_id=1, datetime=datetime.now()),
 ]
 
 files_to_not_delete = [

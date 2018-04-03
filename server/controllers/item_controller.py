@@ -10,16 +10,17 @@ from server.models.item_model import ItemSchema, Item
 items = Blueprint('items', __name__)
 
 
-"""
-GET All Items
-Support filtering: 
-    - warehouse_id: int
-    - category_id: int
-    - between: YY-mm-ddTHH:MM:SS.fffff,YY-mm-ddTHH:MM:SS.fffff
-        (exclude the timezone change in the query, Python doesn't support RFC 3339 format)
-"""
 @items.route('/items', methods=['GET'])
 def get_all_items():
+    """
+    GET All Items
+    Filters:
+        - warehouse_id: int
+        - category_id: int
+        - between: YY-mm-ddTHH:MM:SS.fffff,YY-mm-ddTHH:MM:SS.fffff
+            (exclude the timezone change in the query, Python doesn't support RFC 3339 format)
+    """
+
     items = Item.query
 
     # filter on warehouse_id
@@ -43,21 +44,25 @@ def get_all_items():
     return ItemSchema(many=True).jsonify(items)
 
 
-"""
-GET Item by ID
-"""
 @items.route('/items/<int:id>', methods=['GET'])
 def get_item(id):
+    """
+    GET Item by ID
+    """
+
     return ItemSchema().jsonify(Item.query.get(id))
 
 
-"""
-GET Item Image by ID
-"""
 @items.route('/items/<int:id>/image', methods=['GET'])
 def get_item_image(id):
+    """
+    GET Item Image by ID
+    """
+
     img_file = '{0}.jpeg'.format(id)
     img_path = os.path.join(DevConfig.IMG_PATH, img_file)
+
+    # if the image exists on the server, return it, otherwise return the no_image
     if os.path.isfile(img_path):
         return send_file(img_path, mimetype='image/jpeg')
     else:

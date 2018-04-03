@@ -1,24 +1,30 @@
+import os
 from datetime import datetime
 
-import os
-from flask import Blueprint, abort, request, json, send_file
+from flask import Blueprint, abort, request, json
 
 from server.config import DevConfig
-from server.modules import db, ser, ca, ml
 from server.helpers.gps_helper import find_closest_warehouse
 from server.models.item_model import Item
 from server.models.warehouse_model import Warehouse
+from server.modules import db, ca, ml
+from server.serial.serial_handler import serial_write
 
 capture = Blueprint('capture', __name__)
 
 
-"""
-POST Pi capture
-Requires datetime, latitude, longitude in POST body as json
-Uses the Pi Camera to take an image
-"""
 @capture.route('/capture/pi', methods=['POST'])
 def capture_pi_image():
+    """
+    POST Pi capture
+    Uses the Pi Camera to take an image
+    JSON Body:
+        datetime
+            time the image is detected
+        latitude, longitude
+            location of the warehouse
+    """
+
     # fetch json data
     dt = request.json.get('datetime')
     lat = request.json.get('latitude')
@@ -70,16 +76,29 @@ def capture_pi_image():
 
     # return the category id to the DE1
     serial_write("cat:{0}\r".format(category_id))
-    return ''
+
+    response = {
+        'category_id': category_id,
+        'warehouse_id': closest_warehouse.id,
+        'message': 'Item captured successfully'
+    }
+
+    return json.dumps(response)
 
 
-"""
-POST mobile capture
-Requires datetime, latitude, longitude in POST body as form-data
-Requires an image to be in the body
-"""
 @capture.route('/capture/mobile', methods=['POST'])
 def capture_image_mobile():
+    """
+    POST mobile capture
+    Form-data Body:
+        datetime
+            time the image is detected
+        latitude, longitude
+            location of the warehouse
+        file
+            the image to be added
+    """
+
     # fetch form data and image file
     dt = request.form.get('datetime')
     lat = request.form.get('latitude')

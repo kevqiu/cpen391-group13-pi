@@ -7,32 +7,37 @@ from server.modules import db
 cycles = Blueprint('cycles', __name__)
 
 
-"""
-GET All Cycles
-"""
 @cycles.route('/cycles', methods=['GET'])
 def get_all_cycles():
+    """
+    GET All Cycles
+    """
     return CycleSchema(many=True).jsonify(Cycle.query.all())
 
 
-"""
-GET Cycles by Id
-"""
 @cycles.route('/cycles/<int:id>', methods=['GET'])
 def get_cycle(id):
+    """
+    GET Cycle by Id
+    """
     return CycleSchema().jsonify(Cycle.query.get(id))
 
-"""
-POST a cycle
-Requires start time
-"""
+
 @cycles.route('/cycles', methods=['POST'])
 def create_cycle():
+    """
+    POST a cycle
+    JSON Body:
+        start_time
+            start time of the auto sort cycle
+    """
+
     start = request.json.get('start_time')
 
     if not start:
         abort(400, {'message': 'Start time missing from body'})
 
+    # parse datetime into DateTime to be stored in database
     start_time = datetime.strptime(start.split('+')[0].replace('T', ' '), "%Y-%m-%d %H:%M:%S.%f")
 
     cycle = Cycle(start_time=start_time, end_time=start_time)
@@ -47,12 +52,17 @@ def create_cycle():
     return json.dumps(response)
 
 
-"""
-PATCH a Cycle
-Requires end time
-"""
 @cycles.route('/cycles/<int:id>', methods=['PATCH'])
 def patch_cycle(id):
+    """
+    PATCH a Cycle
+    Id:
+        id of the cycle to be modified
+    JSON Body:
+        end_time
+            end time of the auto sort cycle
+    """
+
     end = request.json.get('end_time')
 
     if not end:
@@ -63,4 +73,8 @@ def patch_cycle(id):
     Cycle.query.filter(Cycle.id == id).update({'end_time': end_time})
     db.session.commit()
 
-    return 'Cycle updated successfully'
+    response = {
+        'message': 'Cycle updated successfully'
+    }
+
+    return json.dumps(response)

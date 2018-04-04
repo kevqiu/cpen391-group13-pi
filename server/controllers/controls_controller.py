@@ -11,7 +11,7 @@ def change_model(model):
     """
     POST model type
     """
-    DevConfig.ML_MODEL_TO_USE = model
+    DevConfig.ML_MODEL_TO_USE = model.lower()
     ml.init_model(DevConfig)
     return 'Model set: ' + model
 

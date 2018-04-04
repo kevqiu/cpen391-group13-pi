@@ -77,11 +77,11 @@ class ClusterModel:
     def colour_id(self, center):
         max_col = np.argmax(center)
         if max_col==0:
-            return "RED"
+            return "red"
         if max_col==1:
-            return "GREEN"
+            return "green"
         if max_col==2:
-            return "BLUE"
+            return "blue"
 
 
 

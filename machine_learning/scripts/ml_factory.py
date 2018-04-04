@@ -1,6 +1,7 @@
 from machine_learning.scripts.tf_cnn.cnn_model import CNNModel
 from machine_learning.scripts.sklearn_clustering.kmean_clst_model import ClusterModel
 from machine_learning.scripts.sk_knn.knn_model import KNNModel
+from machine_learning.scripts.ensemble import ensembleModel
 
 class MLFactory():
 
@@ -23,6 +24,8 @@ class MLFactory():
             self.model = ClusterModel(config)
         elif model_str == 'knn':
             self.model = KNNModel(config)
+        elif model_str == 'ensemble':
+            self.model = ensembleModel(config)
         else:
             raise ValueError('No matching model found, currently'
                              'supports: cnn, knn, clustering')

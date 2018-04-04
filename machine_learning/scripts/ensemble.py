@@ -12,7 +12,7 @@ class ensembleModel:
     def predict(self, image_path):
 
         (category1, confidence1)= self.model1.predict(image_path)
-        (category2, confidence2)= self.model1.predict(image_path)
+        (category2, confidence2)= self.model2.predict(image_path)
 
         clusters= self.model2.clusters(image_path)
         
@@ -27,17 +27,4 @@ class ensembleModel:
             ensbl_conf=(confidence1+confidence2)//2
 
         return (ensbl_cat,ensbl_conf)
-        
-        	
-
-        # if category1!=category2 :
-        #     ensbl_cat="OTHER"
-        #     ensbl_conf=(confidence1+confidence2)//2
-        # else:
-        #     ensbl_conf=confidence1
-        #     ensbl_cat=category1
-        # print(ensbl_cat,ensbl_conf)
-        # return (ensbl_cat,ensbl_conf)
-
-
         

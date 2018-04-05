@@ -6,6 +6,13 @@ from server.serial.serial_handler import serial_write
 
 controls = Blueprint('controls', __name__)
 
+@controls.route('/controls/model', methods=['GET'])
+def change_model(model):
+    """
+    GET model type
+    """
+    return DevConfig.ML_MODEL_TO_USE.upper()
+
 @controls.route('/controls/model/<model>', methods=['POST'])
 def change_model(model):
     """

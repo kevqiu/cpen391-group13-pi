@@ -47,6 +47,8 @@ class KNNModel:
 
         self._verbose = config.ML_VERBOSE
 
+        self.cluster_colours = None
+
         if (self._rgb_only):
             self._colour_mapper = {
                 'pink': 'red',
@@ -122,11 +124,11 @@ class KNNModel:
                 print('Mapping to RGB:')
                 print(cluster_colours)
 
+        self.cluster_colours = cluster_colours
         if len(cluster_colours) == 0: 
             colour_mode = 'black'
             confidence = 0
             return colour_mode, confidence
-
         colour_mode = max(set(cluster_colours), key=cluster_colours.count)
         confidence = cluster_colours.count(colour_mode) / len(cluster_colours)
         if (self._verbose):

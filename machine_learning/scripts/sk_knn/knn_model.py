@@ -47,6 +47,7 @@ class KNNModel:
 
         self._verbose = config.ML_VERBOSE
 
+        self.cluster_colours = None
 
         if (self._rgb_only):
             self._colour_mapper = {
@@ -123,65 +124,16 @@ class KNNModel:
                 print('Mapping to RGB:')
                 print(cluster_colours)
 
+        self.cluster_colours = cluster_colours
         if len(cluster_colours) == 0: 
             colour_mode = 'black'
             confidence = 0
             return colour_mode, confidence
-
         colour_mode = max(set(cluster_colours), key=cluster_colours.count)
         confidence = cluster_colours.count(colour_mode) / len(cluster_colours)
         if (self._verbose):
             print('Mode: {0} | Confidence: {1}'.format(colour_mode, confidence))
         return colour_mode, confidence
-
-
-    def clusters(self,image_path):
-        image = Image.open(image_path).convert('RGB')
-        img_matrix = np.array(image)
-        # Flatten
-        num_pixels = img_matrix.shape[0] * img_matrix.shape[1]
-        dataset = img_matrix.reshape((num_pixels, 3))
-
-        # Sample every nth pixel
-        sample = dataset[1::self._image_skip_step]
-        num_samples = num_pixels/self._image_skip_step
-        sample_threshold = num_samples * 0.025
-        if (self._verbose):
-            print('Sample size: {}, sample threshold: {}'.format(num_samples, sample_threshold))
-
-        # Obtain the kmeans of the sample and the cluster of each
-        # element in the sample
-        clusters = self._cluster_model.fit(sample).cluster_centers_
-        cluster_size = self._cluster_model.labels_
-
-        # Determine the RGB colour of each cluster
-        cluster_colours = self._neighbour_model.predict(clusters)
-
-        # The number of pixels in each category
-        unique, counts = np.unique(cluster_size, return_counts=True)
-        unique = [cluster_colours[x] for x in unique]
-        if (self._verbose):
-            print(dict(zip(unique, counts)))
-
-        # Threshold values
-        thresholded_count_ind = np.where(counts > sample_threshold)
-        cluster_colours = cluster_colours[thresholded_count_ind]
-        cluster_colours = cluster_colours.tolist()
-        if (self._verbose):
-            print(cluster_colours)
-
-        # map and mode
-        confidence = 1
-        if (self._rgb_only):
-            cluster_colours = [self._colour_mapper[x]  
-                            for x in cluster_colours 
-                            if (self._colour_mapper[x] != 'black')]
-            if (self._verbose):
-                print('Mapping to RGB:')
-                return(cluster_colours)
-
-        else:
-            return {}
 
 
 class MockConfig:

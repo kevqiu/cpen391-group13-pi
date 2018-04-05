@@ -1,9 +1,29 @@
-from flask import Blueprint
+from flask import Blueprint, json
+from server.modules import ml
+from server.config import DevConfig
 
 from server.serial.serial_handler import serial_write
 
 controls = Blueprint('controls', __name__)
 
+@controls.route('/controls/model', methods=['GET'])
+def get_ml_model():
+    """
+    GET model type
+    """
+    response = {
+        'model': DevConfig.ML_MODEL_TO_USE.upper()
+    }
+    return json.dumps(response)
+
+@controls.route('/controls/model/<model>', methods=['POST'])
+def change_ml_model(model):
+    """
+    POST model type
+    """
+    DevConfig.ML_MODEL_TO_USE = model.lower()
+    ml.init_model(DevConfig)
+    return 'Model set: ' + model
 
 @controls.route('/controls/autosort', methods=['POST'])
 def autosort():

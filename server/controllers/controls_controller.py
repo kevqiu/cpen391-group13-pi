@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, json
 from server.modules import ml
 from server.config import DevConfig
 
@@ -7,14 +7,17 @@ from server.serial.serial_handler import serial_write
 controls = Blueprint('controls', __name__)
 
 @controls.route('/controls/model', methods=['GET'])
-def change_model(model):
+def get_ml_model():
     """
     GET model type
     """
-    return DevConfig.ML_MODEL_TO_USE.upper()
+    response = {
+        'model': DevConfig.ML_MODEL_TO_USE.upper()
+    }
+    return json.dumps(response)
 
 @controls.route('/controls/model/<model>', methods=['POST'])
-def change_model(model):
+def change_ml_model(model):
     """
     POST model type
     """
